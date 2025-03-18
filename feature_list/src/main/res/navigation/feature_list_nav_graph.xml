@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Id of navigation graph matches id of the bottom_nav_menu.xml item (to make bottom menu navigation work).-->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/listNavGraph"
+        app:startDestination="@id/productListFragment">
+    <fragment
+            android:id="@+id/productListFragment"
+            android:name="com.miiiin15.myloan.list.presentation.screen.list.ProductListFragment"
+            android:label="AlbumListFragment">
+<!--        <action-->
+<!--                android:id="@+id/actionProductListToProductDetail"-->
+<!--                app:destination="@id/productDetailFragment" />-->
+    </fragment>
+
+<!--    TODO : 상품상세-->
+<!--    <fragment-->
+<!--            android:id="@+id/productDetailFragment"-->
+<!--            android:name="com."-->
+<!--            android:label="ProductDetailFragment">-->
+<!--        <argument-->
+<!--                android:name="productName"-->
+<!--                app:argType="string" />-->
+<!--    </fragment>-->
+</navigation>
