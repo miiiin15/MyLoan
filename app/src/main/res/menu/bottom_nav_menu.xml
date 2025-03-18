@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Id of each item matches the id of the feature specific nav graph (to make bottom menu navigation work).-->
+    <item
+            android:id="@+id/listNavGraph"
+            android:icon="@drawable/ic_list"
+            android:title="@string/product_list" />
+    <item
+            android:id="@+id/resultNavGraph"
+            android:icon="@drawable/ic_result"
+            android:title="@string/apply_result" />
+    <item
+            android:id="@+id/continueNavGraph"
+            android:icon="@drawable/ic_continue"
+            android:title="@string/loan_continue" />
+</menu>
