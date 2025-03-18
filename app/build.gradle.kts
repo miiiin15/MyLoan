@@ -1,20 +1,41 @@
+import com.android.build.api.dsl.ApplicationDefaultConfig
+import java.util.Locale
+
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    id("local.app")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
+    val catalogs = extensions.getByType<VersionCatalogsExtension>()
+    val libs = catalogs.named("libs")
+
+
     namespace = "com.miiiin15.myloan"
-    compileSdk = 35
+
+    compileSdk = libs.findVersion("compileSdk").get().toString().toInt()
 
     defaultConfig {
-        applicationId = "com.miiiin15.myloan"
-        minSdk = 24
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = libs.findVersion("minSdk").get().toString().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    defaultConfig {
+        namespace = "com.miiiin15.myloan"
+
+        versionCode = 1
+        versionName = "0.0.1" // SemVer (Major.Minor.Patch)
+        minSdk = 28
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled = true
+
+        vectorDrawables {
+            useSupportLibrary = true
+        }
+
+        // TODO :  String 값 추가할 일 있으면 buildConfigFieldFromGradleProperty("변수명")
     }
 
     buildTypes {
@@ -26,29 +47,46 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
+
+    @Suppress("UnstableApiUsage")
     buildFeatures {
+        viewBinding = true
+        buildConfig = true
         compose = true
     }
+
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.4"
+        kotlinCompilerExtensionVersion = libs.findVersion("kotlinCompilerExtensionVersion").get().toString()
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+    @Suppress("UnstableApiUsage")
+    testOptions {
+        unitTests.isReturnDefaultValues = true
     }
 }
 
 dependencies {
-    api(libs.bundles.compose)
-    api(libs.composeMaterial)
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(projects.featureBase)
+    // TODO : 모듈 추가시
+    implementation(projects.featureList)
 }
+
+fun ApplicationDefaultConfig.buildConfigFieldFromGradleProperty(gradlePropertyName: String) {
+    val propertyValue = project.properties[gradlePropertyName] as? String
+    checkNotNull(propertyValue) { "Gradle property $gradlePropertyName is null" }
+
+    val androidResourceName = "GRADLE_${gradlePropertyName.toSnakeCase()}".uppercase(Locale.getDefault())
+    buildConfigField("String", androidResourceName, propertyValue)
+}
+
+fun String.toSnakeCase() = this.split(Regex("(?=[A-Z])")).joinToString("_") { it.lowercase(Locale.getDefault()) }

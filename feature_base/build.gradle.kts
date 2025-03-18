@@ -1,43 +1,38 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
+    id("local.library")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
-    namespace = "com.miiiin15.base"
-    compileSdk = 34
-
-    defaultConfig {
-        minSdk = 24
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
+    namespace = "com.miiiin15.myloan.base"
 }
 
 dependencies {
+    // See Dependency management section in the README.md
+    // https://github.com/igorwojda/android-showcase#dependency-management
+    api(libs.kotlin)
+    api(libs.playCore)
+    api(libs.coreKtx)
+    api(libs.fragmentKtx)
+    api(libs.viewBindingPropertyDelegate)
+    api(libs.timber)
+    api(libs.constraintLayout)
+    api(libs.appCompat)
+    api(libs.recyclerView)
+    api(libs.coroutines)
+    api(libs.material)
+    api(libs.composeMaterial)
+    api(libs.accompanistFlowLayout)
+    api(libs.bundles.koin)
+    api(libs.bundles.retrofit)
+    api(libs.bundles.navigation)
+    api(libs.bundles.lifecycle)
+    api(libs.bundles.room)
+    api(libs.bundles.compose)
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+
+//    testImplementation(projects.libraryTestUtils)
+//    testImplementation(libs.bundles.test)
+
+    testRuntimeOnly(libs.junitJupiterEngine)
 }
