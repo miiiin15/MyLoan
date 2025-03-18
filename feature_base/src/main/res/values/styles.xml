@@ -1,0 +1,6 @@
+<resources>
+    <style name="Theme.MyLoan" parent="Theme.Material3.DynamicColors.Light">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+</resources>
