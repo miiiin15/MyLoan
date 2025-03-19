@@ -3,4 +3,5 @@ plugins {
     id("local.detekt")
     id("local.spotless")
     alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.google.gms.google.services) apply false
 }

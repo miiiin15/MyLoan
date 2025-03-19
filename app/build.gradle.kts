@@ -3,6 +3,7 @@ import java.util.Locale
 
 plugins {
     id("local.app")
+    alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.compose.compiler)
 }
 

@@ -1,6 +1,7 @@
 plugins {
     id("local.library")
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -29,7 +30,10 @@ dependencies {
     api(libs.bundles.lifecycle)
     api(libs.bundles.room)
     api(libs.bundles.compose)
-
+    implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.firestore.ktx)
+//    api(libs.bundles.firebase)
 
 //    testImplementation(projects.libraryTestUtils)
 //    testImplementation(libs.bundles.test)

@@ -54,6 +54,7 @@ mockk = "1.14.2"
 espresso = "3.6.1"
 coreTesting = "2.2.0"
 junitVersion = "1.2.1"
+googleGmsGoogleServices = "4.4.2"
 
 [plugins]
 # Search Gradle Plugins https://plugins.gradle.org/
@@ -68,6 +69,7 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 safeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
 junit5Android = { id = "de.mannodermaus.android-junit5", version.ref = "androidJUnit5" }
 testLogger = { id = "com.adarshr.test-logger", version.ref = "testLogger" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 
 [libraries]
 kotlin = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
@@ -107,6 +109,8 @@ roomCompiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 accompanistFlowLayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanistFlowLayout" }
 detektFormatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 konsist = "com.lemonappdev:konsist:0.16.0"
+firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
+firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx" }
 
 # Test dependencies
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -127,5 +131,6 @@ compose = ["composeUI", "tooling","toolingPreview", "lottie", "coil"]
 lifecycle = ["viewmodelKtx", "livedataKtx", "livedataRuntime"]
 navigation = ["navigationFragment", "navigationUiKtx"]
 room = ["roomKtx", "roomRuntime"]
+firebase = ["firebase-analytics-ktx", "firebase-firestore-ktx"]
 test = ["testCoroutines", "kluent", "testRunner", "espresso", "mockk", "coreTesting", "junitJupiterApi",
     "junitJupiterEngine", "konsist"]
