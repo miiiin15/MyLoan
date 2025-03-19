@@ -5,6 +5,7 @@ import com.google.android.material.color.DynamicColors
 import com.miiiin15.myloan.BuildConfig
 import com.miiiin15.myloan.base.baseModule
 import com.miiiin15.myloan.list.featureListModules
+import com.miiiin15.myloan.result.featureResultModules
 
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -35,7 +36,8 @@ class MyLoanApplication : Application() {
             modules(appModule)
             modules(baseModule)
             // TODO : feature 모듈 주입
-              modules(featureListModules)
+            modules(featureListModules)
+            modules(featureResultModules)
 
         }
     }

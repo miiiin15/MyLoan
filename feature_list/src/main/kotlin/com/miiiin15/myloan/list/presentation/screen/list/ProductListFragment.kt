@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.tooling.preview.Preview
 import com.miiiin15.myloan.base.presentation.activity.BaseFragment
 
 class ProductListFragment : BaseFragment() {
@@ -39,4 +40,10 @@ fun ProductListScreen() {
             Spacer(modifier = Modifier.height(4.dp))
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProductListScreenPreview() {
+    ProductListScreen()
 }

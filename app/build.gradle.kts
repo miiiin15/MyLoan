@@ -79,6 +79,7 @@ dependencies {
     implementation(projects.featureBase)
     // TODO : 모듈 추가시
     implementation(projects.featureList)
+    implementation(projects.featureResult)
 }
 
 fun ApplicationDefaultConfig.buildConfigFieldFromGradleProperty(gradlePropertyName: String) {

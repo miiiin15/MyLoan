@@ -21,3 +21,4 @@ rootProject.name = "MyLoan"
 include(":app")
 include(":feature_base")
 include(":feature_list")
+include(":feature_result")
