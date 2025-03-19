@@ -10,7 +10,7 @@
             android:icon="@drawable/ic_result"
             android:title="@string/apply_result" />
     <item
-            android:id="@+id/continueNavGraph"
-            android:icon="@drawable/ic_continue"
-            android:title="@string/loan_continue" />
+            android:id="@+id/resumeNavGraph"
+            android:icon="@drawable/ic_resume"
+            android:title="@string/loan_resume" />
 </menu>

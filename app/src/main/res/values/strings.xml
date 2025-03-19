@@ -4,10 +4,10 @@
     <!--Dynamic module titles-->
     <string name="feature_list">feature list</string>
     <string name="feature_result">feature result</string>
-    <string name="feature_continuer">feature continue</string>
+    <string name="feature_resume">feature resume</string>
 
     <!--Bottom menu-->
     <string name="product_list">상품목록</string>
     <string name="apply_result">신청결과</string>
-    <string name="loan_continue">이어하기</string>
+    <string name="loan_resume">이어하기</string>
 </resources>

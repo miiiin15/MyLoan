@@ -6,6 +6,7 @@ import com.miiiin15.myloan.BuildConfig
 import com.miiiin15.myloan.base.baseModule
 import com.miiiin15.myloan.list.featureListModules
 import com.miiiin15.myloan.result.featureResultModules
+import com.miiiin15.myloan.resume.featureResumeModules
 
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -38,6 +39,7 @@ class MyLoanApplication : Application() {
             // TODO : feature 모듈 주입
             modules(featureListModules)
             modules(featureResultModules)
+            modules(featureResumeModules)
 
         }
     }

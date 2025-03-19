@@ -8,4 +8,6 @@
 
     <include app:graph="@navigation/feature_result_nav_graph" />
 
+    <include app:graph="@navigation/feature_resume_nav_graph" />
+
 </navigation>
