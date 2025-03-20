@@ -31,9 +31,7 @@ dependencies {
     api(libs.bundles.room)
     api(libs.bundles.compose)
     implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
-    implementation(libs.firebase.analytics.ktx)
-    implementation(libs.firebase.firestore.ktx)
-//    api(libs.bundles.firebase)
+    api(libs.bundles.firebase)
 
 //    testImplementation(projects.libraryTestUtils)
 //    testImplementation(libs.bundles.test)
