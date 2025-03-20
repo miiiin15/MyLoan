@@ -12,10 +12,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.tooling.preview.Preview
+import com.miiii15.myloan.list.R
 import com.miiiin15.myloan.base.presentation.activity.BaseFragment
+import org.koin.androidx.navigation.koinNavGraphViewModel
 
 class ProductListFragment : BaseFragment() {
+
+    private val viewModel: ProductListViewmodel by koinNavGraphViewModel(R.id.listNavGraph)
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        viewModel.fetchApplicant()
         return ComposeView(requireContext()).apply {
             setContent {
                 ProductListScreen()
