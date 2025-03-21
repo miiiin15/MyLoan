@@ -8,14 +8,17 @@ import com.miiiin15.myloan.base.presentation.viewmodel.BaseAction
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseState
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseViewModel
 import com.miiiin15.myloan.list.domain.usecase.GetApplicantUseCase
+import com.miiiin15.myloan.list.domain.usecase.GetProductListUseCase
 import com.miiiin15.myloan.list.domain.usecase.SetApplicantUseCase
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.UUID
 
 internal class ProductListViewmodel(
     private val savedStateHandle: SavedStateHandle,
     private val setApplicantUseCase: SetApplicantUseCase,
-    private val getApplicantUseCase: GetApplicantUseCase
+    private val getApplicantUseCase: GetApplicantUseCase,
+    private val getProductListUseCase: GetProductListUseCase
 ) :
     BaseViewModel<ProductListViewmodel.UiState, ProductListViewmodel.Action>(
         UiState.Loading
@@ -46,7 +49,21 @@ internal class ProductListViewmodel(
         }
     }
 
-    internal sealed interface Action : BaseAction<UiState> { }
+    fun fetchProductList() {
+        viewModelScope.launch {
+            getProductListUseCase().also { result ->
+                when (result) {
+                    is Result.Success -> {
+                        // response.value
+                    }
+
+                    is Result.Failure -> {}
+                }
+            }
+        }
+    }
+
+    internal sealed interface Action : BaseAction<UiState> {}
 
     @Immutable
     internal sealed interface UiState : BaseState {
