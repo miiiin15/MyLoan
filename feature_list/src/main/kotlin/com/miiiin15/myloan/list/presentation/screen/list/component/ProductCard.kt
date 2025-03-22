@@ -26,7 +26,13 @@ import com.miiiin15.myloan.list.domain.model.Product
 @Composable
 internal fun ProductCard(product: Product) {
     val backgroundColor =
-        if (product.sale) Color.White else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.48f)
+        if (product.sale) Color.White else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+    val nameColor =
+        if (product.sale) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onErrorContainer
+    val rateColor =
+        if (product.sale) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.outline
+
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,6 +55,7 @@ internal fun ProductCard(product: Product) {
                     text = product.name,
                     type = TextType.BodyLarge,
                     fontWeight = FontWeight.Bold,
+                    color = nameColor,
                 )
                 Spacer(modifier = Modifier.height(Dimen.spaceS))
                 TextDynamic(
@@ -61,11 +68,30 @@ internal fun ProductCard(product: Product) {
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.End,
             ) {
-                TextDynamic(
-                    text = "${product.rate}%",
-                    type = TextType.BodyLarge,
-                    color = MaterialTheme.colorScheme.error
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TextDynamic(
+                        text = "연",
+                        type = TextType.BodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(vertical = Dimen.spaceS),
+                        color = rateColor
+                    )
+                    TextDynamic(
+                        text = product.rate,
+                        type = TextType.BodyLarge,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(start = Dimen.spaceXS),
+                        color = rateColor
+                    )
+                    TextDynamic(
+                        text = "%",
+                        type = TextType.BodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = rateColor
+                    )
+                }
                 Spacer(modifier = Modifier.height(Dimen.spaceS))
                 TextDynamic(
                     text = product.limit,
@@ -88,7 +114,7 @@ private fun ProductCardPreview() {
             description = "신용대출 상품 설명",
             rate = "7.4",
             limit = "최고 3천만원",
-            sale = false
+            sale = true
         )
     )
 }
