@@ -4,52 +4,93 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miiii15.myloan.list.R
+import com.miiiin15.myloan.base.common.res.Dimen
 import com.miiiin15.myloan.base.presentation.activity.BaseFragment
+import com.miiiin15.myloan.base.presentation.compose.composable.DataNotFoundAnim
+import com.miiiin15.myloan.base.presentation.compose.composable.ProgressIndicator
+import com.miiiin15.myloan.list.domain.model.Product
+import com.miiiin15.myloan.list.presentation.screen.list.ProductListViewmodel.UiState
+import com.miiiin15.myloan.list.presentation.screen.list.ProductListViewmodel.UiState.Content
+import com.miiiin15.myloan.list.presentation.screen.list.ProductListViewmodel.UiState.Error
+import com.miiiin15.myloan.list.presentation.screen.list.ProductListViewmodel.UiState.Loading
+import com.miiiin15.myloan.list.presentation.screen.list.component.ProductCard
 import org.koin.androidx.navigation.koinNavGraphViewModel
 
 class ProductListFragment : BaseFragment() {
 
     private val viewModel: ProductListViewmodel by koinNavGraphViewModel(R.id.listNavGraph)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         viewModel.fetchApplicant()
+        viewModel.fetchProductList()
         return ComposeView(requireContext()).apply {
             setContent {
-                ProductListScreen()
+                ProductListScreen(viewModel)
             }
         }
     }
 }
 
 @Composable
-fun ProductListScreen() {
-    Column(
+private fun ProductListScreen(viewModel: ProductListViewmodel) {
+    val uiState: UiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
+
+    uiState.let {
+        when (it) {
+            Error -> DataNotFoundAnim()
+            Loading -> ProgressIndicator()
+            is Content -> {
+                ProductGrid(productList = it.productList, viewModel = viewModel)
+            }
+        }
+    }
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ProductGrid(productList: List<Product>, viewModel: ProductListViewmodel) {
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .background(MaterialTheme.colorScheme.background)
+            .padding(Dimen.screenContentPadding),
+        contentPadding = PaddingValues(Dimen.screenContentPadding),
     ) {
-        BasicText(text = "Product List")
-        Spacer(modifier = Modifier.height(8.dp))
-        // 예시 데이터
-        val products = listOf("Product 1", "Product 2", "Product 3")
-        products.forEach { product ->
-            BasicText(text = product)
-            Spacer(modifier = Modifier.height(4.dp))
+        items(items = productList, key = { it.productType }) { product ->
+            ElevatedCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(Dimen.spaceS)
+                    .wrapContentSize(),
+                enabled = product.sale,
+                onClick = { viewModel.onProductClick(product.productType) }
+            ) {
+                ProductCard(product)
+            }
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ProductListScreenPreview() {
-    ProductListScreen()
-}
+

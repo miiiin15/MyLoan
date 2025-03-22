@@ -7,11 +7,15 @@ import com.miiiin15.myloan.base.domain.result.Result
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseAction
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseState
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseViewModel
+import com.miiiin15.myloan.list.domain.model.Product
 import com.miiiin15.myloan.list.domain.usecase.GetApplicantUseCase
 import com.miiiin15.myloan.list.domain.usecase.GetProductListUseCase
 import com.miiiin15.myloan.list.domain.usecase.SetApplicantUseCase
+import com.miiiin15.myloan.list.presentation.screen.list.ProductListViewmodel.UiState
+import com.miiiin15.myloan.list.presentation.screen.list.ProductListViewmodel.UiState.Content
+import com.miiiin15.myloan.list.presentation.screen.list.ProductListViewmodel.UiState.Error
+import com.miiiin15.myloan.list.presentation.screen.list.ProductListViewmodel.UiState.Loading
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.util.UUID
 
 internal class ProductListViewmodel(
@@ -20,8 +24,8 @@ internal class ProductListViewmodel(
     private val getApplicantUseCase: GetApplicantUseCase,
     private val getProductListUseCase: GetProductListUseCase
 ) :
-    BaseViewModel<ProductListViewmodel.UiState, ProductListViewmodel.Action>(
-        UiState.Loading
+    BaseViewModel<UiState, ProductListViewmodel.Action>(
+        Loading
     ) {
 
 
@@ -52,21 +56,40 @@ internal class ProductListViewmodel(
     fun fetchProductList() {
         viewModelScope.launch {
             getProductListUseCase().also { result ->
-                when (result) {
+                val action = when (result) {
                     is Result.Success -> {
-                        // response.value
+                        if (result.value.isEmpty()) {
+                            Action.ProductListLoadFailure
+                        } else {
+                            Action.ProductListLoadSuccess(result.value)
+                        }
                     }
 
-                    is Result.Failure -> {}
+                    is Result.Failure -> {
+                        Action.ProductListLoadFailure
+                    }
                 }
+                sendAction(action)
             }
         }
     }
 
-    internal sealed interface Action : BaseAction<UiState> {}
+    fun onProductClick(productType: String) {  }
+
+    internal sealed interface Action : BaseAction<UiState> {
+        class ProductListLoadSuccess(private val productList: List<Product>) : Action {
+            override fun reduce(state: UiState) = Content(productList)
+        }
+
+
+        object ProductListLoadFailure : Action {
+            override fun reduce(state: UiState) = Error
+        }
+    }
 
     @Immutable
     internal sealed interface UiState : BaseState {
+        data class Content(val productList: List<Product>) : UiState
         object Loading : UiState
         object Error : UiState
     }
