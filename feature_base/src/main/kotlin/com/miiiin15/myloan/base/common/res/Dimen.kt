@@ -3,6 +3,7 @@ package com.miiiin15.myloan.base.common.res
 import androidx.compose.ui.unit.dp
 
 object Dimen {
+    val spaceXS = 2.dp // 매우 작은 간격 (2dp)
     val spaceS = 4.dp // 작은 간격 (4dp)
     val spaceM = 8.dp // 중간 간격 (8dp)
     val spaceL = 16.dp // 큰 간격 (16dp)
