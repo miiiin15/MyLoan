@@ -62,15 +62,12 @@ class NavHostActivity : BaseActivity(R.layout.activity_nav_host),
         destination: NavDestination,
         arguments: Bundle?
     ) {
-        when (destination.label) {
-            DESTINATION_PRODUCT_LIST_LABEL -> {
-//                AlbumListFragment.configureAppBar(this)
-            }
-
-            else -> {
-                binding.mainAppbarLayout.visibility = View.GONE
-            }
-        }
+       binding.bottomNav.visibility = when (destination.label) {
+           DESTINATION_PRODUCT_LIST_LABEL,
+           DESTINATION_APPLY_RESULT_LABEL,
+           DESTINATION_LOAN_RESUME_LABEL -> View.VISIBLE
+           else -> View.GONE
+       }
     }
 }
 

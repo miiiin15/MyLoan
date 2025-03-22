@@ -7,7 +7,7 @@
     <fragment
             android:id="@+id/productResultFragment"
             android:name="com.miiiin15.myloan.result.presentation.screen.result.ApplyResultFragment"
-            android:label="AlbumResultFragment">
+            android:label="ApplyResultFragment">
 <!--        <action-->
 <!--                android:id="@+id/actionProductResultToProductDetail"-->
 <!--                app:destination="@id/productDetailFragment" />-->

@@ -19,6 +19,8 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int) : AppCompatActivity
             get() = activity as BaseActivity
 
         const val DESTINATION_PRODUCT_LIST_LABEL = "ProductListFragment"
+        const val DESTINATION_APPLY_RESULT_LABEL = "ApplyResultFragment"
+        const val DESTINATION_LOAN_RESUME_LABEL = "LoanResumeFragment"
     }
 
     /** Declaring the app bar components in the BaseActivity to be able to access them from other fragments and avoid cyclic dependencies*/
