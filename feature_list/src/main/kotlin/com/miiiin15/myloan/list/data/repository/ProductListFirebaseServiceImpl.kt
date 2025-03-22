@@ -2,6 +2,7 @@ package com.miiiin15.myloan.list.data.repository
 
 import com.google.firebase.database.FirebaseDatabase
 import com.miiiin15.myloan.list.data.datasource.api.response.GetAllProductListResponse
+import com.miiiin15.myloan.list.data.datasource.api.response.GetProductDetailResponse
 import com.miiiin15.myloan.list.data.datasource.api.service.ProductListFirebaseService
 import kotlinx.coroutines.tasks.await
 
@@ -14,6 +15,16 @@ internal class ProductListFirebaseServiceImpl(
             val productListRef = firebaseDatabase.getReference("product_list")
             val snapshot = productListRef.get().await()
             return GetAllProductListResponse(snapshot)
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+    override suspend fun getProductDetail(productType: String): GetProductDetailResponse {
+        try {
+            val productDetailRef = firebaseDatabase.getReference("product_detail/$productType")
+            val snapshot = productDetailRef.get().await()
+            return GetProductDetailResponse(snapshot)
         } catch (e: Exception) {
             throw e
         }

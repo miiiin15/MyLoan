@@ -5,6 +5,7 @@ import com.miiiin15.myloan.list.domain.model.Product
 import com.miiiin15.myloan.list.domain.repository.ProductListRepository
 import com.miiiin15.myloan.base.domain.result.Result
 import com.miiiin15.myloan.list.data.datasource.api.model.toDomain
+import com.miiiin15.myloan.list.domain.model.ProductDetail
 
 internal class ProductListRepositoryImpl(
     private val productListFirebaseService: ProductListFirebaseService,
@@ -13,6 +14,15 @@ internal class ProductListRepositoryImpl(
         return runCatching {
             val result = productListFirebaseService.getProductList().productList
             result.map { it.toDomain() }
+        }.fold(
+            onSuccess = { Result.Success(it) },
+            onFailure = { Result.Failure(it) }
+        )
+    }
+    override suspend fun getProductDetail(productType: String): Result<ProductDetail> {
+        return runCatching {
+            val result = productListFirebaseService.getProductDetail(productType).productDetail
+            result.toDomain()
         }.fold(
             onSuccess = { Result.Success(it) },
             onFailure = { Result.Failure(it) }
