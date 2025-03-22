@@ -3,7 +3,9 @@ package com.miiiin15.myloan.list.presentation.screen.list
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.miiii15.myloan.list.R
 import com.miiiin15.myloan.base.domain.result.Result
+import com.miiiin15.myloan.base.presentation.nav.NavManager
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseAction
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseState
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseViewModel
@@ -20,6 +22,7 @@ import java.util.UUID
 
 internal class ProductListViewmodel(
     private val savedStateHandle: SavedStateHandle,
+    private val navManager: NavManager,
     private val setApplicantUseCase: SetApplicantUseCase,
     private val getApplicantUseCase: GetApplicantUseCase,
     private val getProductListUseCase: GetProductListUseCase
@@ -74,7 +77,12 @@ internal class ProductListViewmodel(
         }
     }
 
-    fun onProductClick(productType: String) {  }
+    fun onProductClick(productType: String) {
+        val navDirections =
+            ProductListFragmentDirections.actionProductListToProductDetail(productType)
+
+        navManager.navigate(navDirections)
+    }
 
     internal sealed interface Action : BaseAction<UiState> {
         class ProductListLoadSuccess(private val productList: List<Product>) : Action {
