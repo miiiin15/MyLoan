@@ -1,1 +1,4 @@
-<resources></resources>
+<resources>
+    <string name="under_construction">조회중</string>
+    <string name="data_not_found">데이터를 찾을 수 없습니다</string>
+</resources>
