@@ -16,6 +16,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -43,8 +44,6 @@ class ProductListFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel.fetchApplicant()
-        viewModel.fetchProductList()
         return ComposeView(requireContext()).apply {
             setContent {
                 ProductListScreen(viewModel)
@@ -57,21 +56,31 @@ class ProductListFragment : BaseFragment() {
 private fun ProductListScreen(viewModel: ProductListViewmodel) {
     val uiState: UiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.fetchApplicant()
+        viewModel.fetchProductList()
+    }
+
     uiState.let {
         when (it) {
             Error -> DataNotFoundAnim()
             Loading -> ProgressIndicator()
             is Content -> {
-                ProductGrid(productList = it.productList, viewModel = viewModel)
+                ProductGrid(
+                    productList = it.productList,
+                    onProductClick = viewModel::onProductClick
+                )
             }
         }
     }
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ProductGrid(productList: ImmutableList<Product>, viewModel: ProductListViewmodel) {
+private fun ProductGrid(
+    productList: ImmutableList<Product>,
+    onProductClick: (String) -> Unit
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -86,7 +95,7 @@ private fun ProductGrid(productList: ImmutableList<Product>, viewModel: ProductL
                     .padding(Dimen.spaceS)
                     .wrapContentSize(),
                 enabled = product.sale,
-                onClick = { viewModel.onProductClick(product.productType) }
+                onClick = { onProductClick(product.productType) }
             ) {
                 ProductCard(product)
             }

@@ -30,7 +30,7 @@ internal class ProductListViewmodel(
     BaseViewModel<UiState, ProductListViewmodel.Action>(
         Loading
     ) {
-
+    var _isProductListFetched = false
 
     fun fetchApplicant() {
         if (savedStateHandle.get<Boolean>("isApplicantFetched") == true) return
@@ -57,6 +57,8 @@ internal class ProductListViewmodel(
     }
 
     fun fetchProductList() {
+        if (_isProductListFetched) return
+
         viewModelScope.launch {
             getProductListUseCase().also { result ->
                 val action = when (result) {
@@ -64,6 +66,7 @@ internal class ProductListViewmodel(
                         if (result.value.isEmpty()) {
                             Action.ProductListLoadFailure
                         } else {
+                            _isProductListFetched = true
                             Action.ProductListLoadSuccess(ImmutableList.copyOf(result.value))
                         }
                     }
