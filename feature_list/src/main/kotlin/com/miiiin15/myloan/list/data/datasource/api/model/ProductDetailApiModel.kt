@@ -3,8 +3,9 @@ package com.miiiin15.myloan.list.data.datasource.api.model
 import com.miiiin15.myloan.list.domain.model.DetailItem
 import com.miiiin15.myloan.list.domain.model.ProductDetail
 
-data class ProductListApiModel(
+data class ProductDetailApiModel(
     val productName: String = "",
+    val code: String = "",
     val rateRange: String = "",
     val limitAmount: String = "",
     val duration: String = "",
@@ -17,9 +18,10 @@ data class DetailItemApiModel(
     val value: String = ""
 )
 
-internal fun ProductListApiModel.toDomain(): ProductDetail {
+internal fun ProductDetailApiModel.toDomain(): ProductDetail {
     return ProductDetail(
         productName = productName,
+        code = code,
         rateRange = rateRange,
         limitAmount = limitAmount,
         duration = duration,

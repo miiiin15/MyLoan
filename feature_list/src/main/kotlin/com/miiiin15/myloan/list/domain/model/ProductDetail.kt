@@ -5,6 +5,7 @@ import androidx.compose.runtime.Stable
 @Stable
 internal data class ProductDetail(
     val productName: String,
+    val code:String,
     val rateRange: String,
     val limitAmount: String,
     val duration: String,

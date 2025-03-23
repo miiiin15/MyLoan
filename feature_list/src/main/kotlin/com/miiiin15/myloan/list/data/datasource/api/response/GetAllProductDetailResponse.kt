@@ -1,12 +1,12 @@
 package com.miiiin15.myloan.list.data.datasource.api.response
 
 import com.google.firebase.database.DataSnapshot
-import com.miiiin15.myloan.list.data.datasource.api.model.ProductListApiModel
+import com.miiiin15.myloan.list.data.datasource.api.model.ProductDetailApiModel
 
 data class GetProductDetailResponse(
-    val productDetail: ProductListApiModel
+    val productDetail: ProductDetailApiModel
 ) {
     constructor(snapshot: DataSnapshot) : this(
-        productDetail = snapshot.getValue(ProductListApiModel::class.java) ?: ProductListApiModel()
+        productDetail = snapshot.getValue(ProductDetailApiModel::class.java) ?: ProductDetailApiModel()
     )
 }
