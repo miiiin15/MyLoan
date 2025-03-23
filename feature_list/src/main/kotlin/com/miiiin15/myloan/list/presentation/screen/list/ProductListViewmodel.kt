@@ -3,7 +3,7 @@ package com.miiiin15.myloan.list.presentation.screen.list
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.miiii15.myloan.list.R
+import com.google.common.collect.ImmutableList
 import com.miiiin15.myloan.base.domain.result.Result
 import com.miiiin15.myloan.base.presentation.nav.NavManager
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseAction
@@ -64,7 +64,7 @@ internal class ProductListViewmodel(
                         if (result.value.isEmpty()) {
                             Action.ProductListLoadFailure
                         } else {
-                            Action.ProductListLoadSuccess(result.value)
+                            Action.ProductListLoadSuccess(ImmutableList.copyOf(result.value))
                         }
                     }
 
@@ -85,7 +85,7 @@ internal class ProductListViewmodel(
     }
 
     internal sealed interface Action : BaseAction<UiState> {
-        class ProductListLoadSuccess(private val productList: List<Product>) : Action {
+        class ProductListLoadSuccess(private val productList: ImmutableList<Product>) : Action {
             override fun reduce(state: UiState) = Content(productList)
         }
 
@@ -97,7 +97,7 @@ internal class ProductListViewmodel(
 
     @Immutable
     internal sealed interface UiState : BaseState {
-        data class Content(val productList: List<Product>) : UiState
+        data class Content(val productList: ImmutableList<Product>) : UiState
         object Loading : UiState
         object Error : UiState
     }

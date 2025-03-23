@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.common.collect.ImmutableList
 import com.miiii15.myloan.list.R
 import com.miiiin15.myloan.base.common.res.Dimen
 import com.miiiin15.myloan.base.presentation.activity.BaseFragment
@@ -70,7 +71,7 @@ private fun ProductListScreen(viewModel: ProductListViewmodel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ProductGrid(productList: List<Product>, viewModel: ProductListViewmodel) {
+private fun ProductGrid(productList: ImmutableList<Product>, viewModel: ProductListViewmodel) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
