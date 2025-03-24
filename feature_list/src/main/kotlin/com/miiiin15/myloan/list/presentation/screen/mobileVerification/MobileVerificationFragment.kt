@@ -4,13 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miiii15.myloan.list.R
@@ -34,9 +27,11 @@ import com.miiiin15.myloan.base.presentation.compose.composable.ProgressIndicato
 import com.miiiin15.myloan.base.presentation.compose.composable.SelectField
 import com.miiiin15.myloan.base.presentation.compose.composable.ShowAlert
 import com.miiiin15.myloan.base.presentation.compose.composable.TextDynamic
+import com.miiiin15.myloan.list.domain.model.PolicyItem
 import com.miiiin15.myloan.list.domain.model.mobileVerification.ContactInfo
 import com.miiiin15.myloan.list.domain.model.mobileVerification.UserInfo
 import com.miiiin15.myloan.list.domain.model.mobileVerification.VerificationInfo
+import com.miiiin15.myloan.list.presentation.component.PolicyList
 import org.koin.androidx.navigation.koinNavGraphViewModel
 
 class MobileVerificationFragment : BaseFragment() {
@@ -74,6 +69,30 @@ private fun MobileVerificationScreen(viewModel: MobileVerificationViewModel) {
         remember(uiState) { uiState is UiState.CodeReceived || uiState is UiState.CodeVerifyFailure }
     val isVerificationConfirmed = remember(uiState) { uiState is UiState.Completed }
 
+    val fakePolicy = listOf(
+        PolicyItem(
+            id = "c1",
+            title = "개인정보 수집 및 이용 동의",
+            required = true,
+            files = listOf("file1.pdf"),
+            options = listOf("option1", "option2")
+        ),
+        PolicyItem(
+            id = "b4",
+            title = "서비스 이용 약관 동의",
+            required = true,
+            files = listOf("file2.pdf"),
+            options = listOf("option3", "option4")
+        ),
+        PolicyItem(
+            id = "a1",
+            title = "마케팅 정보 수신 동의",
+            required = false,
+            files = listOf("file2.pdf"),
+            options = listOf("option3", "option4")
+        )
+    )
+
     uiState.let {
         when (it) {
             is UiState.Failure, is UiState.CodeVerifyFailure -> {
@@ -108,7 +127,10 @@ private fun MobileVerificationScreen(viewModel: MobileVerificationViewModel) {
         onButtonClick = viewModel::onCompleteClick,
         content = {
             // 약관 동의
-            MobileVerificationPolicy(onClick = {})
+            PolicyList(
+                policyList = fakePolicy,
+                modifier = Modifier.padding(top = Dimen.spaceXL, bottom = Dimen.spaceL),
+            ) { }
 
             // 개인정보 입력
             MobileVerificationContent(
@@ -136,48 +158,6 @@ private fun MobileVerificationScreen(viewModel: MobileVerificationViewModel) {
             }
         })
 }
-
-// 약관
-@Composable
-fun MobileVerificationPolicy(
-    onClick: () -> Unit
-) {
-    val fakePolicy = listOf(
-        "c1" to "개인정보 수집 및 이용 동의",
-        "b4" to "서비스 이용 약관 동의",
-        "a1" to "마케팅 정보 수신 동의"
-    )
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = Dimen.spaceXL, bottom = Dimen.spaceL)
-            .clip(MaterialTheme.shapes.small)
-            .background(MaterialTheme.colorScheme.onPrimary)
-            .border(
-                width = Dimen.spaceXS,
-                color = MaterialTheme.colorScheme.outline,
-                shape = MaterialTheme.shapes.small
-            )
-            .clickable { onClick() },
-    ) {
-        Column(
-            horizontalAlignment = Alignment.Start,
-            modifier = Modifier.padding(Dimen.spaceM)
-        ) {
-            fakePolicy.forEachIndexed { code, policy ->
-                TextDynamic(
-                    text = "[필수] " + policy.second,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                if (code < fakePolicy.size - 1) {
-                    Spacer(modifier = Modifier.height(Dimen.spaceM))
-                }
-            }
-        }
-    }
-}
-
 
 // 개인정보 입력
 @Composable
