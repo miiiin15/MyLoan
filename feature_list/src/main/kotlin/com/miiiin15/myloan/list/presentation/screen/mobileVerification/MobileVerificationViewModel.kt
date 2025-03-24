@@ -1,6 +1,7 @@
 package com.miiiin15.myloan.list.presentation.screen.mobileVerification
 
 import androidx.lifecycle.viewModelScope
+import com.miiiin15.myloan.base.common.util.SharedPreferenceManager
 import com.miiiin15.myloan.base.presentation.nav.NavManager
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseAction
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseState
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 
 internal class MobileVerificationViewModel(
     private val navManager: NavManager,
+    private val sharedPreferenceManager: SharedPreferenceManager,
 ) : BaseViewModel<UiState, Action>(UiState.Initial) {
 
     private val _userInfo = MutableStateFlow(UserInfo())
@@ -121,7 +123,10 @@ internal class MobileVerificationViewModel(
                 } else {
                     throw Exception("인증번호가 일치하지 않습니다.")
                 }
-                sendAction(Action.VerificationSuccess(fakeResult.token))
+
+                sharedPreferenceManager.putString("accessToken", fakeResult.token).let {
+                    sendAction(Action.VerificationSuccess(fakeResult.token))
+                }
             } catch (e: Exception) {
                 sendAction(Action.VerificationFailure(e.message ?: "인증 실패"))
             } finally {
@@ -141,6 +146,11 @@ internal class MobileVerificationViewModel(
 
 
     fun onCompleteClick() {
+        sharedPreferenceManager.getString("accessToken")?.let { _ ->
+            // TODO: 다음 화면으로 이동
+        } ?: run {
+            sendAction(Action.Failure("Access Token이 없습니다. 인증을 다시 시도해주세요."))
+        }
     }
 }
 
