@@ -10,6 +10,7 @@ kotlinSymbolProcessing = "2.0.20-1.0.25"
 kotlinCompilerExtensionVersion = "1.5.13"
 
 compileSdk = "35"
+kotlinxCollectionsImmutable = "0.3.5"
 minSdk = "26"
 
 navigation = "2.9.0"
@@ -73,6 +74,7 @@ google-gms-google-services = { id = "com.google.gms.google-services", version.re
 
 [libraries]
 kotlin = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+kotlinx-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 retrofitCore = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 kotlinxSerializationConverter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "kotlinxSerializationConverter" }
