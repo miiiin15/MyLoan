@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
 import com.miiiin15.myloan.base.common.res.Dimen
 
 @Composable
@@ -48,7 +49,7 @@ fun SelectField(
             .clip(MaterialTheme.shapes.small)
             .background(color = backgroundColor)
             .border(
-                width = Dimen.spaceXS,
+                width = 1.5.dp,
                 color = borderColor,
                 shape = MaterialTheme.shapes.small
             )

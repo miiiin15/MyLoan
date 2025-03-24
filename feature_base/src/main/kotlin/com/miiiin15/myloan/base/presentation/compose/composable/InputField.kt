@@ -21,6 +21,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.miiiin15.myloan.base.common.res.Dimen
 import com.miiiin15.myloan.base.common.util.AsteriskMaskTransformation
 
@@ -108,7 +109,7 @@ fun InputField(
             .clip(MaterialTheme.shapes.small)
             .background(color =backgroundColor)
             .border(
-                width = Dimen.spaceXS,
+                width = 1.5.dp,
                 color = borderColor,
                 shape = MaterialTheme.shapes.small
             )
