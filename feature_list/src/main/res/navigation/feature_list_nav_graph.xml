@@ -19,5 +19,17 @@
         <argument
             android:name="producType"
             app:argType="string" />
+
+        <action
+            android:id="@+id/actionProductDetailToMobileVerification"
+            app:destination="@id/mobileVerificationFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/mobileVerificationFragment"
+        android:name="com.miiiin15.myloan.list.presentation.screen.mobileVerification.MobileVerificationFragment"
+        android:label="MobileVerificationFragment">
+
+    </fragment>
+
 </navigation>

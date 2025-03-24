@@ -65,7 +65,7 @@ class ProductDetailFragment : BaseFragment() {
 
         return ComposeView(requireContext()).apply {
             setContent {
-                ProductListScreenWithEffect(viewModel, productType)
+                ProductDetailScreen(viewModel, productType)
             }
         }
     }
@@ -76,21 +76,17 @@ class ProductDetailFragment : BaseFragment() {
     }
 }
 
+
 @Composable
-private fun ProductListScreenWithEffect(
+private fun ProductDetailScreen(
     viewModel: ProductDetailViewModel,
     productType: String
 ) {
+    val uiState: UiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
+
     LaunchedEffect(Unit) {
         viewModel.fetchProductDetail(productType)
     }
-
-    ProductDetailScreen(viewModel)
-}
-
-@Composable
-private fun ProductDetailScreen(viewModel: ProductDetailViewModel) {
-    val uiState: UiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
 
     uiState.let {
         when (it) {
@@ -99,7 +95,7 @@ private fun ProductDetailScreen(viewModel: ProductDetailViewModel) {
                     productDetail = it.productDetail,
                     onDocClick = { /* TODO: 상품설명서 클릭 이벤트 */ },
                     onTermsClick = { /* TODO: 여신거래기본약관 클릭 이벤트 */ },
-                    onApplyClick = { /* TODO: 신청 클릭 이벤트 */ }
+                    onApplyClick = viewModel::onApplyButtonClick
                 )
             }
 

@@ -3,6 +3,7 @@ package com.miiiin15.myloan.list.presentation.screen.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.miiiin15.myloan.base.domain.result.Result
+import com.miiiin15.myloan.base.presentation.nav.NavManager
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseViewModel
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseState
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseAction
@@ -12,6 +13,7 @@ import com.miiiin15.myloan.list.domain.usecase.GetProductDetailUseCase
 import kotlinx.coroutines.launch
 
 internal class ProductDetailViewModel(
+    private val navManager: NavManager,
     private val savedStateHandle: SavedStateHandle,
     private val getProductDetailUseCase: GetProductDetailUseCase,
 ) : BaseViewModel<ProductDetailViewModel.UiState, ProductDetailViewModel.Action>(Loading) {
@@ -31,6 +33,12 @@ internal class ProductDetailViewModel(
                 sendAction(action)
             }
         }
+    }
+
+    fun onApplyButtonClick(){
+        val navDirection = ProductDetailFragmentDirections.actionProductDetailToMobileVerification()
+
+        navManager.navigate(navDirection)
     }
 
     fun clear() {
