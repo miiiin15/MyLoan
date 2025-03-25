@@ -29,7 +29,14 @@
         android:id="@+id/mobileVerificationFragment"
         android:name="com.miiiin15.myloan.list.presentation.screen.mobileVerification.MobileVerificationFragment"
         android:label="MobileVerificationFragment">
-
+        <action
+            android:id="@+id/actionMobileVerificationToLoanApplyPolicy"
+            app:destination="@id/loanApplyPolicyFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/loanApplyPolicyFragment"
+        android:name="com.miiiin15.myloan.list.presentation.screen.apply.policy.LoanApplyPolicyFragment"
+        android:label="LoanApplicationFragment"></fragment>
 
 </navigation>

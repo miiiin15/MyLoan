@@ -147,7 +147,7 @@ internal class MobileVerificationViewModel(
 
     fun onCompleteClick() {
         sharedPreferenceManager.getString("accessToken")?.let { _ ->
-            // TODO: 다음 화면으로 이동
+            navManager.navigate(MobileVerificationFragmentDirections.actionMobileVerificationToLoanApplyPolicy())
         } ?: run {
             sendAction(Action.Failure("Access Token이 없습니다. 인증을 다시 시도해주세요."))
         }
