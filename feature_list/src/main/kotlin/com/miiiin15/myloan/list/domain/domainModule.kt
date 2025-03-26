@@ -4,6 +4,7 @@ import com.miiiin15.myloan.list.domain.usecase.GetApplicantUseCase
 import com.miiiin15.myloan.list.domain.usecase.GetProductListUseCase
 import com.miiiin15.myloan.list.domain.usecase.GetProductDetailUseCase
 import com.miiiin15.myloan.list.domain.usecase.SetApplicantUseCase
+import com.miiiin15.myloan.list.domain.usecase.SubmitLoanAgreementUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
@@ -12,4 +13,5 @@ internal val domainModule = module {
     singleOf(::SetApplicantUseCase)
     singleOf(::GetProductListUseCase)
     singleOf(::GetProductDetailUseCase)
+    singleOf(::SubmitLoanAgreementUseCase)
 }
