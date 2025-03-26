@@ -11,7 +11,7 @@ import com.miiiin15.myloan.list.domain.repository.ProductListRepository
 import org.koin.dsl.module
 
 internal val dataModule = module {
-    single<ProductListFirebaseService> { ProductListFirebaseServiceImpl(get()) }
+    single<ProductListFirebaseService> { ProductListFirebaseServiceImpl(get(),get()) }
 
     single<ProductListRepository> { ProductListRepositoryImpl(get()) }
     single<ApplicantRepository> { ApplicantRepositoryImpl(get()) }
