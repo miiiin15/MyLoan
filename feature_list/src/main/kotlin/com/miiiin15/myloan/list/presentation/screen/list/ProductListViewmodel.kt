@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.google.common.collect.ImmutableList
+import com.miiiin15.myloan.base.AppConfig
 import com.miiiin15.myloan.base.domain.result.Result
 import com.miiiin15.myloan.base.presentation.nav.NavManager
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseAction
@@ -39,7 +40,7 @@ internal class ProductListViewmodel(
             getApplicantUseCase().also { result ->
                 when (result) {
                     is Result.Success -> {
-                        // TODO: 신청자 번호 후처리
+                        AppConfig.applicantId = result.value.id
                     }
 
                     is Result.Failure -> {
