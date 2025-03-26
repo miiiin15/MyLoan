@@ -20,8 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,21 +27,23 @@ import com.miiii15.myloan.list.R
 import com.miiiin15.myloan.base.common.res.Dimen
 import com.miiiin15.myloan.base.presentation.activity.BaseFragment
 import com.miiiin15.myloan.base.presentation.compose.composable.BaseScreen
-import com.miiiin15.myloan.base.presentation.compose.composable.DoubleSwitch
-import com.miiiin15.myloan.base.presentation.compose.composable.ShowAlert
 import com.miiiin15.myloan.base.presentation.compose.composable.TextDynamic
 import com.miiiin15.myloan.base.presentation.compose.composable.TextType
-import com.miiiin15.myloan.base.presentation.ext.collectInLaunchedEffectWithLifecycle
 import com.miiiin15.myloan.list.presentation.component.PolicyList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.withContext
 import org.koin.androidx.navigation.koinNavGraphViewModel
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import com.miiiin15.myloan.base.presentation.compose.composable.DoubleSwitch
+import com.miiiin15.myloan.base.presentation.compose.composable.ShowAlert
+import com.miiiin15.myloan.base.presentation.ext.collectInLaunchedEffectWithLifecycle
+import kotlinx.coroutines.launch
 
 class LoanApplyPolicyFragment : BaseFragment() {
 
@@ -114,6 +114,7 @@ fun LoanApplyPolicyScreen(
                     showAlert = true
                 }
             }
+            else->{}
         }
     }
 
@@ -136,7 +137,7 @@ fun LoanApplyPolicyScreen(
         onAgreementCheck = { index, checked ->
             dispatch(ViewIntent.AgreementCheck(index, checked))
         },
-        onSubmit = {}
+        onSubmit = { dispatch(ViewIntent.Submit) }
     )
 }
 

@@ -15,15 +15,16 @@ data class AgreementItem(
 @Immutable
 sealed interface ViewIntent : MviIntent {
     object Initial : ViewIntent
-    data class PolicyChecked(val allPolicyChecked :Boolean) : ViewIntent
+    data class PolicyChecked(val allPolicyChecked: Boolean) : ViewIntent
     data class AgreementCheck(val index: Int, val checked: Boolean) : ViewIntent
     object Validate : ViewIntent
+    object Submit : ViewIntent
 }
 
 @Immutable
 data class ViewState(
     val policyList: List<PolicyItem>,
-    val isAllPolicyChecked:Boolean,
+    val isAllPolicyChecked: Boolean,
     val agreementCheckedList: List<Boolean>,
     val isLoading: Boolean,
     val isValidate: Boolean,
@@ -87,11 +88,42 @@ sealed interface PartialStateChange {
 
     data class Validate(val isValidate: Boolean) : PartialStateChange {
         override fun reduce(viewState: ViewState): ViewState =
-           viewState.copy(isValidate = isValidate)
+            viewState.copy(isValidate = isValidate)
+    }
+
+    sealed interface Submit : PartialStateChange {
+        object Submitting : Submit
+        object Success : Submit
+        data class Failure(val errorMessage: String) : Submit
+
+        override fun reduce(viewState: ViewState): ViewState =
+            when (this) {
+                is Submitting -> viewState.copy(
+                    isLoading = true,
+                    isSubmitting = true,
+                    isSubmitted = false,
+                    errorMessage = null
+                )
+
+                is Success -> viewState.copy(
+                    isLoading = false,
+                    isSubmitting = false,
+                    isSubmitted = true,
+                    errorMessage = null
+                )
+
+                is Failure -> viewState.copy(
+                    isLoading = false,
+                    isSubmitting = false,
+                    isSubmitted = false,
+                    errorMessage = errorMessage
+                )
+            }
     }
 }
 
 // 일회성 UI 이벤트 alert
 sealed interface SingleEvent : MviSingleEvent {
     data class Failure(val errorMessage: String) : SingleEvent
+    object SubmitSuccess : SingleEvent
 }

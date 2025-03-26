@@ -4,9 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import com.miiiin15.myloan.base.AppConfig
+import com.miiiin15.myloan.base.common.util.SharedPreferenceManager
 import com.miiiin15.myloan.base.presentation.nav.NavManager
 import com.miiiin15.myloan.base.presentation.viewmodel2.AbstractMviViewModel
 import com.miiiin15.myloan.list.domain.model.PolicyItem
+import com.miiiin15.myloan.list.domain.model.apply.LoanApplyState
+import com.miiiin15.myloan.list.domain.usecase.SubmitLoanAgreementUseCase
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -24,6 +28,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.take
+import com.miiiin15.myloan.base.domain.result.Result
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flow
 
 @OptIn(
     FlowPreview::class,
@@ -31,10 +38,12 @@ import kotlinx.coroutines.flow.take
 )
 class LoanApplyPolicyViewModel(
     private val navManager: NavManager,
+    private val sharedPreferenceManager: SharedPreferenceManager,
+    private val submitLoanAgreementUseCase: SubmitLoanAgreementUseCase,
 ) : AbstractMviViewModel<ViewIntent, ViewState, SingleEvent>() {
-    override val rawLogTag get() = "SearchVM[${System.identityHashCode(this)}]"
     override val viewState: StateFlow<ViewState>
 
+    private var accessToken: String? = null
     val agreementItems = listOf(
         AgreementItem("대출 한도 및 금리 안내", "대출 신청 시 적용 가능한 한도와 금리에 대한 상세 내용을 확인하고 동의하시겠습니까?"),
         AgreementItem(
@@ -47,6 +56,8 @@ class LoanApplyPolicyViewModel(
     var agreementCheckedList by mutableStateOf(List(4) { false })
 
     init {
+        accessToken = sharedPreferenceManager.getString("accessToken")
+
         val initialVS = ViewState.initial()
 
         // 인텐트 → PartialStateChange → ViewState 이렇게 상태가 점진적으로 업데이트되어 UI에 반영됩니다.
@@ -70,14 +81,21 @@ class LoanApplyPolicyViewModel(
         return onEach { change ->
             val event = when (change) {
                 is PartialStateChange.Policy.Error -> SingleEvent.Failure(change.errorMessage)
+                is PartialStateChange.Submit.Failure -> SingleEvent.Failure(change.errorMessage)
+                is PartialStateChange.Submit.Success -> SingleEvent.SubmitSuccess
 
                 PartialStateChange.Policy.Loading -> return@onEach
                 is PartialStateChange.Policy.Data -> return@onEach
                 is PartialStateChange.PolicyChecked -> return@onEach
                 is PartialStateChange.Validate -> return@onEach
                 is PartialStateChange.AgreementCheck -> return@onEach
+                PartialStateChange.Submit.Submitting -> return@onEach
             }
             sendEvent(event)
+
+            if (event is SingleEvent.SubmitSuccess) {
+                // TODO: 화면 이동
+            }
         }
     }
 
@@ -140,13 +158,37 @@ class LoanApplyPolicyViewModel(
                 PartialStateChange.Validate(viewState.value.isAllPolicyChecked && agreementCheckedList.all { it })
             }
 
+        val submitFlow = filter { it is ViewIntent.Submit }
+            .flatMapConcat {
+                flow {
+                    emit(PartialStateChange.Submit.Submitting)
+                    val result = submitLoanAgreementUseCase(
+                        LoanApplyState(
+                            "TestType",
+                            AppConfig.applicantId ?: "",
+                            accessToken!!,
+                            System.currentTimeMillis(),
+                            "agreement",
+                            ""
+                        )
+                    )
+                    when (result) {
+                        is Result.Success -> emit(PartialStateChange.Submit.Success)
+                        is Result.Failure -> emit(
+                            PartialStateChange.Submit.Failure(
+                                result.throwable?.message ?: "Unknown error"
+                            )
+                        )
+                    }
+                }
+            }
+
         return merge(
             initialFlow,
             policyCheckFlow,
             agreementCheckFlow,
-            validateFlow
+            validateFlow,
+            submitFlow
         )
     }
-
-
 }
