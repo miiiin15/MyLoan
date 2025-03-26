@@ -3,7 +3,7 @@ package com.miiiin15.myloan.list.domain.model
 import androidx.compose.runtime.Immutable
 
 @Immutable
-internal data class Product(
+data class Product(
     val group: String,           // 상품 그룹 (예: "LOAN")
     val productType: String,     // 상품 개별 타입 (예: "LOAN_CREDIT")
     val name: String,            // 상품 한글 이름 (예: "신용대출")
