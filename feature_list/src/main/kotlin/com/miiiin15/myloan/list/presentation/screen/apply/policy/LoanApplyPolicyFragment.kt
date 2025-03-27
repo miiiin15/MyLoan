@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +42,7 @@ import org.koin.androidx.navigation.koinNavGraphViewModel
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import com.miiiin15.myloan.base.presentation.compose.composable.DoubleSwitch
+import com.miiiin15.myloan.base.presentation.compose.composable.LoadingDialog
 import com.miiiin15.myloan.base.presentation.compose.composable.ShowAlert
 import com.miiiin15.myloan.base.presentation.ext.collectInLaunchedEffectWithLifecycle
 import kotlinx.coroutines.launch
@@ -114,7 +116,8 @@ fun LoanApplyPolicyScreen(
                     showAlert = true
                 }
             }
-            else->{}
+
+            else -> {}
         }
     }
 
@@ -149,6 +152,8 @@ fun LoanApplyPolicyContent(
     onAgreementCheck: (Int, Boolean) -> Unit,
     onSubmit: () -> Unit,
 ) {
+
+    LoadingDialog(show = viewState.isLoading)
 
     BaseScreen(
         title = "대출 신청 전 동의",

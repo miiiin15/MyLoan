@@ -3,9 +3,13 @@ package com.miiiin15.myloan.base.presentation.compose.composable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.miiiin15.myloan.base.R
 import com.miiiin15.myloan.base.common.res.Dimen
 
@@ -30,5 +34,21 @@ fun ProgressIndicator() {
                 .align(Alignment.Center) // 인디케이터를 중앙에 정렬
                 .size(Dimen.spaceXXL),
         )
+    }
+}
+
+
+@Composable
+fun LoadingDialog(show: Boolean) {
+    if (show) {
+        Dialog(onDismissRequest = {}) {
+            Surface(
+                tonalElevation = 0.dp,
+                color = MaterialTheme.colorScheme.background.copy(alpha = 0f),
+                shape = MaterialTheme.shapes.medium
+            ) {
+                ProgressIndicator()
+            }
+        }
     }
 }
