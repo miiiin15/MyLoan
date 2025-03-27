@@ -11,14 +11,17 @@ import com.miiiin15.myloan.list.domain.model.mobileVerification.ContactInfo
 import com.miiiin15.myloan.list.domain.model.mobileVerification.UserInfo
 import com.miiiin15.myloan.list.domain.model.mobileVerification.VerificationInfo
 import com.miiiin15.myloan.list.domain.model.mobileVerification.VerificationPurposeName
+import com.miiiin15.myloan.list.domain.repository.ApplyInfoRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 internal class MobileVerificationViewModel(
     private val navManager: NavManager,
+    private val applyInfoRepository: ApplyInfoRepository,
     private val sharedPreferenceManager: SharedPreferenceManager,
 ) : BaseViewModel<UiState, Action>(UiState.Initial) {
 
@@ -147,6 +150,10 @@ internal class MobileVerificationViewModel(
 
     fun onCompleteClick() {
         sharedPreferenceManager.getString("accessToken")?.let { _ ->
+            applyInfoRepository.setApplyInfo(
+                "applyNumber",
+                UUID.randomUUID().toString().substring(0, 10)
+            )
             navManager.navigate(MobileVerificationFragmentDirections.actionMobileVerificationToLoanApplyPolicy())
         } ?: run {
             sendAction(Action.Failure("Access Token이 없습니다. 인증을 다시 시도해주세요."))

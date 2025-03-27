@@ -4,13 +4,13 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.google.common.collect.ImmutableList
-import com.miiiin15.myloan.base.AppConfig
 import com.miiiin15.myloan.base.domain.result.Result
 import com.miiiin15.myloan.base.presentation.nav.NavManager
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseAction
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseState
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseViewModel
 import com.miiiin15.myloan.list.domain.model.Product
+import com.miiiin15.myloan.list.domain.repository.ApplyInfoRepository
 import com.miiiin15.myloan.list.domain.usecase.GetApplicantUseCase
 import com.miiiin15.myloan.list.domain.usecase.GetProductListUseCase
 import com.miiiin15.myloan.list.domain.usecase.SetApplicantUseCase
@@ -24,6 +24,7 @@ import java.util.UUID
 internal class ProductListViewmodel(
     private val savedStateHandle: SavedStateHandle,
     private val navManager: NavManager,
+    private val applyInfoRepository: ApplyInfoRepository,
     private val setApplicantUseCase: SetApplicantUseCase,
     private val getApplicantUseCase: GetApplicantUseCase,
     private val getProductListUseCase: GetProductListUseCase
@@ -40,7 +41,7 @@ internal class ProductListViewmodel(
             getApplicantUseCase().also { result ->
                 when (result) {
                     is Result.Success -> {
-                        AppConfig.applicantId = result.value.id
+                        applyInfoRepository.setApplyInfo("applicantId", result.value.id)
                     }
 
                     is Result.Failure -> {
