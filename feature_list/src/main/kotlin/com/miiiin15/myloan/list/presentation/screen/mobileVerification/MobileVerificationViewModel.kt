@@ -86,10 +86,6 @@ internal class MobileVerificationViewModel(
         }
     }
 
-    fun test() {
-        sendAction(Action.Failure("테스트 메시지"))
-    }
-
     fun requestVerificationCode(mobileNumber: String) {
         val validate = validateVerificationState()
         if (validate != null) {
@@ -153,6 +149,15 @@ internal class MobileVerificationViewModel(
             applyInfoRepository.setApplyInfo(
                 "applyNumber",
                 UUID.randomUUID().toString().substring(0, 10)
+            )
+            applyInfoRepository.setApplyInfo("userName", _userInfo.value.name ?: "")
+            applyInfoRepository.setApplyInfo(
+                "userPhoneNumber",
+                _contactInfo.value.phoneNumber ?: ""
+            )
+            applyInfoRepository.setApplyInfo(
+                "userResidentialNumber",
+                _userInfo.value.birthDate + _userInfo.value.residentialNumber
             )
             navManager.navigate(MobileVerificationFragmentDirections.actionMobileVerificationToLoanApplyPolicy())
         } ?: run {
