@@ -12,6 +12,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,6 +69,7 @@ private fun MobileVerificationScreen(viewModel: MobileVerificationViewModel) {
     val isCodeReceived =
         remember(uiState) { uiState is UiState.CodeReceived || uiState is UiState.CodeVerifyFailure }
     val isVerificationConfirmed = remember(uiState) { uiState is UiState.Completed }
+    val isAllPolicyAgreed = remember { mutableStateOf(false) }
 
     val fakePolicy = listOf(
         PolicyItem(
@@ -123,14 +125,15 @@ private fun MobileVerificationScreen(viewModel: MobileVerificationViewModel) {
         title = "휴대폰 인증",
         modifier = Modifier
             .padding(horizontal = Dimen.screenContentPadding),
-        buttonEnabled = isVerificationConfirmed,
+        buttonEnabled = isVerificationConfirmed && isAllPolicyAgreed.value,
         onButtonClick = viewModel::onCompleteClick,
         content = {
             // 약관 동의
             PolicyList(
                 policyList = fakePolicy,
                 modifier = Modifier.padding(top = Dimen.spaceXL, bottom = Dimen.spaceL),
-            ) { }
+                onAllPolicyAgreed = { _, checked -> isAllPolicyAgreed.value = checked },
+            )
 
             // 개인정보 입력
             MobileVerificationContent(

@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import com.miiiin15.myloan.base.common.res.Dimen
 import com.miiiin15.myloan.base.presentation.compose.composable.TextDynamic
 import com.miiiin15.myloan.base.presentation.compose.composable.TextType
@@ -31,7 +30,7 @@ import com.miiiin15.myloan.list.domain.model.PolicyItem
 fun PolicyList(
     policyList: List<PolicyItem>,
     modifier: Modifier = Modifier,
-    onAllPolicyAgreed: (Boolean) -> Unit = {},
+    onAllPolicyAgreed: (List<String>, Boolean) -> Unit,
     onClick: () -> Unit = {}
 ) {
 
@@ -46,8 +45,11 @@ fun PolicyList(
     }
 
     // 필수만 검사해서 콜백
+    // TODO : 선택 약관 트리거 점검
     LaunchedEffect(allRequiredChecked) {
-        onAllPolicyAgreed(allRequiredChecked)
+        val checkedIds = policyList
+            .mapIndexedNotNull { idx, item -> if (policyCheckStates[idx]) item.id else null }
+        onAllPolicyAgreed(checkedIds, allRequiredChecked)
     }
 
     val outlineColor = MaterialTheme.colorScheme.outline
@@ -133,28 +135,4 @@ fun PolicyList(
             }
         }
     }
-}
-
-@Preview(showBackground = true, apiLevel = 34)
-@Composable
-fun PolicyListPreview() {
-    PolicyList(
-        policyList = listOf(
-            PolicyItem(
-                id = "1",
-                title = "정책 1",
-                required = true,
-                files = listOf("file1.pdf"),
-                options = listOf("option1", "option2")
-            ),
-            PolicyItem(
-                id = "2",
-                title = "정책 2",
-                required = false,
-                files = listOf("file2.pdf"),
-                options = listOf("option3", "option4")
-            )
-        ),
-        onClick = {}
-    )
 }
