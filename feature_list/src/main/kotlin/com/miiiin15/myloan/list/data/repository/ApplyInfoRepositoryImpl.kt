@@ -25,6 +25,9 @@ class ApplyInfoRepositoryImpl : ApplyInfoRepository {
             "productType" -> applyInfo?.productType = value
             "currentStep" -> applyInfo?.currentStep = value
             "applyNumber" -> applyInfo?.applyNumber = value
+            "userName" -> applyInfo?.userName = value
+            "userPhoneNumber" -> applyInfo?.userPhoneNumber = value
+            "userResidentialNumber" -> applyInfo?.userResidentialNumber = value
             else -> Timber.w("❌ 알 수 없는 키워드: $keyword")
         }
     }
@@ -37,6 +40,9 @@ class ApplyInfoRepositoryImpl : ApplyInfoRepository {
             "productType" -> applyInfo?.productType ?: ""
             "currentStep" -> applyInfo?.currentStep ?: ""
             "applyNumber" -> applyInfo?.applyNumber ?: ""
+            "userName" -> applyInfo?.userName ?: ""
+            "userPhoneNumber" -> applyInfo?.userPhoneNumber ?: ""
+            "userResidentialNumber" -> applyInfo?.userResidentialNumber ?: ""
             else -> {
                 Timber.w("❌ 알 수 없는 키워드: $keyword")
                 ""
