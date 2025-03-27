@@ -7,14 +7,17 @@ import com.miiiin15.myloan.list.data.repository.ApplicantRepositoryImpl
 import com.miiiin15.myloan.list.data.repository.ApplyInfoRepositoryImpl
 import com.miiiin15.myloan.list.data.repository.ProductListFirebaseServiceImpl
 import com.miiiin15.myloan.list.data.repository.ProductListRepositoryImpl
+import com.miiiin15.myloan.list.data.repository.fake.HardCodedContentRepositoryImpl
 import com.miiiin15.myloan.list.domain.repository.ApplicantRepository
 import com.miiiin15.myloan.list.domain.repository.ApplyInfoRepository
 import com.miiiin15.myloan.list.domain.repository.ProductListRepository
+import com.miiiin15.myloan.list.domain.repository.fake.HardCodedContentRepository
 import org.koin.dsl.module
 
 internal val dataModule = module {
     single<ApplyInfoRepository> {ApplyInfoRepositoryImpl()}
     single<ProductListFirebaseService> { ProductListFirebaseServiceImpl(get(),get()) }
+    single<HardCodedContentRepository> {HardCodedContentRepositoryImpl()}
 
     single<ProductListRepository> { ProductListRepositoryImpl(get()) }
     single<ApplicantRepository> { ApplicantRepositoryImpl(get()) }

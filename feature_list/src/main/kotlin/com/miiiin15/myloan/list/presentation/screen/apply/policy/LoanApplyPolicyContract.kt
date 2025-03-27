@@ -11,6 +11,7 @@ data class LoanApplyAgreementInfo(
     val timestamp: Long
 )
 
+@Immutable
 data class AgreementItem(
     val title: String,
     val content: String,
