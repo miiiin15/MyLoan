@@ -36,12 +36,13 @@ internal class ProductListRepositoryImpl(
         return runCatching {
             productListFirebaseService.submitLoanAgreement(
                 LoanApplyStateEntityModel(
-                    loanApplyState.productType,
                     loanApplyState.applicantId,
+                    loanApplyState.productType,
+                    loanApplyState.applyNumber,
                     loanApplyState.accessToken,
                     loanApplyState.timeStamp,
-                    loanApplyState.applyState,
-                    loanApplyState.applyInfo
+                    loanApplyState.applyStep,
+                    loanApplyState.applyState
                 )
             )
         }.fold(

@@ -6,6 +6,11 @@ import com.miiiin15.myloan.base.presentation.viewmodel2.MviSingleEvent
 import com.miiiin15.myloan.base.presentation.viewmodel2.MviViewState
 import com.miiiin15.myloan.list.domain.model.PolicyItem
 
+data class LoanApplyAgreementInfo(
+    val agreedPolicyList: List<String>,
+    val timestamp: Long
+)
+
 data class AgreementItem(
     val title: String,
     val content: String,
@@ -15,7 +20,9 @@ data class AgreementItem(
 @Immutable
 sealed interface ViewIntent : MviIntent {
     object Initial : ViewIntent
-    data class PolicyChecked(val allPolicyChecked: Boolean) : ViewIntent
+    data class PolicyChecked(val checkedList: List<String>, val allPolicyChecked: Boolean) :
+        ViewIntent
+
     data class AgreementCheck(val index: Int, val checked: Boolean) : ViewIntent
     object Validate : ViewIntent
     object Submit : ViewIntent
@@ -24,6 +31,7 @@ sealed interface ViewIntent : MviIntent {
 @Immutable
 data class ViewState(
     val policyList: List<PolicyItem>,
+    val checkedPolicyList: List<String>,
     val isAllPolicyChecked: Boolean,
     val agreementCheckedList: List<Boolean>,
     val isLoading: Boolean,
@@ -36,6 +44,7 @@ data class ViewState(
         fun initial(): ViewState {
             return ViewState(
                 policyList = emptyList(),
+                checkedPolicyList = emptyList(),
                 isAllPolicyChecked = false,
                 agreementCheckedList = listOf(false, false, false, false),
                 isLoading = false,
@@ -76,9 +85,13 @@ sealed interface PartialStateChange {
             }
     }
 
-    data class PolicyChecked(val isAllPolicyChecked: Boolean) : PartialStateChange {
+    data class PolicyChecked(val checkedList: List<String>, val isAllPolicyChecked: Boolean) :
+        PartialStateChange {
         override fun reduce(viewState: ViewState): ViewState =
-            viewState.copy(isAllPolicyChecked = isAllPolicyChecked)
+            viewState.copy(
+                checkedPolicyList = checkedList,
+                isAllPolicyChecked = isAllPolicyChecked
+            )
     }
 
     data class AgreementCheck(val checkedList: List<Boolean>) : PartialStateChange {

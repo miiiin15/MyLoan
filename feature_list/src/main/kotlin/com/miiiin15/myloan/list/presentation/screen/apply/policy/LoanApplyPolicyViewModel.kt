@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.miiiin15.myloan.base.AppConfig
 import com.miiiin15.myloan.base.common.util.SharedPreferenceManager
 import com.miiiin15.myloan.base.presentation.nav.NavManager
 import com.miiiin15.myloan.base.presentation.viewmodel2.AbstractMviViewModel
@@ -29,6 +28,7 @@ import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.take
 import com.miiiin15.myloan.base.domain.result.Result
+import com.miiiin15.myloan.list.domain.repository.ApplyInfoRepository
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 
@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.flow
 )
 class LoanApplyPolicyViewModel(
     private val navManager: NavManager,
+    private val applyInfoRepository: ApplyInfoRepository,
     private val sharedPreferenceManager: SharedPreferenceManager,
     private val submitLoanAgreementUseCase: SubmitLoanAgreementUseCase,
 ) : AbstractMviViewModel<ViewIntent, ViewState, SingleEvent>() {
@@ -57,6 +58,7 @@ class LoanApplyPolicyViewModel(
 
     init {
         accessToken = sharedPreferenceManager.getString("accessToken")
+        applyInfoRepository.setApplyInfo("currentStep", "agreement")
 
         val initialVS = ViewState.initial()
 
@@ -139,7 +141,8 @@ class LoanApplyPolicyViewModel(
         val policyCheckFlow = filter { it is ViewIntent.PolicyChecked }
             .map<ViewIntent, PartialStateChange> { intent ->
                 val isAllChecked = (intent as ViewIntent.PolicyChecked).allPolicyChecked
-                PartialStateChange.PolicyChecked(isAllChecked)
+                val checkedList = (intent as ViewIntent.PolicyChecked).checkedList
+                PartialStateChange.PolicyChecked(checkedList, isAllChecked)
             }
 
         val agreementCheckFlow = filter { it is ViewIntent.AgreementCheck }
@@ -161,15 +164,23 @@ class LoanApplyPolicyViewModel(
         val submitFlow = filter { it is ViewIntent.Submit }
             .flatMapConcat {
                 flow {
+                    val applicantId = applyInfoRepository.getApplyInfo("applicantId")
+                    val applyInfo = applyInfoRepository.getApplyAllInfo()
+                    val applySate = LoanApplyAgreementInfo(
+                        agreedPolicyList = viewState.value.checkedPolicyList,
+                        timestamp = System.currentTimeMillis()
+                    )
+
                     emit(PartialStateChange.Submit.Submitting)
                     val result = submitLoanAgreementUseCase(
                         LoanApplyState(
-                            "TestType",
-                            AppConfig.applicantId ?: "",
-                            accessToken!!,
-                            System.currentTimeMillis(),
-                            "agreement",
-                            ""
+                            applicantId = applicantId,
+                            productType = applyInfo?.productType ?: "",
+                            applyNumber = applyInfo?.applyNumber ?: "",
+                            applyStep = applyInfo?.currentStep ?: "",
+                            accessToken = accessToken!!,
+                            timeStamp = System.currentTimeMillis(),
+                            applyState = applySate
                         )
                     )
                     when (result) {

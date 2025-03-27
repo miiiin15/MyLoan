@@ -1,11 +1,12 @@
 package com.miiiin15.myloan.list.domain.model.apply
 
 data class LoanApplyState(
-    val productType: String = "",
     val applicantId : String = "",
+    val productType: String = "",
+    val applyNumber : String = "",
     val accessToken: String = "",
     val timeStamp: Long = 0L,
-    val applyState: String = "",
-    val applyInfo: Any
+    val applyStep: String = "",
+    val applyState: Any
 )
 

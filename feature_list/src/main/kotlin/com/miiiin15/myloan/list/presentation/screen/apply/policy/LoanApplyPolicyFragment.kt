@@ -132,7 +132,7 @@ fun LoanApplyPolicyScreen(
     // 화면 구성
     LoanApplyPolicyContent(
         viewState = viewState,
-        onPolicyCheck ={dispatch(ViewIntent.PolicyChecked(it))},
+        onPolicyCheck = { list, checked -> dispatch(ViewIntent.PolicyChecked(list, checked)) },
         agreementList = viewModel.agreementItems,
         onAgreementCheck = { index, checked ->
             dispatch(ViewIntent.AgreementCheck(index, checked))
@@ -144,7 +144,7 @@ fun LoanApplyPolicyScreen(
 @Composable
 fun LoanApplyPolicyContent(
     viewState: ViewState,
-    onPolicyCheck: (Boolean) -> Unit,
+    onPolicyCheck: (List<String>, Boolean) -> Unit,
     agreementList: List<AgreementItem>,
     onAgreementCheck: (Int, Boolean) -> Unit,
     onSubmit: () -> Unit,
@@ -159,7 +159,7 @@ fun LoanApplyPolicyContent(
             PolicyList(
                 policyList = viewState.policyList,
                 modifier = Modifier.padding(top = Dimen.spaceXL, bottom = Dimen.spaceL),
-                onAllPolicyAgreed = onPolicyCheck,
+                onAllPolicyAgreed = { list, checked -> onPolicyCheck(list, checked) },
             )
             // 동의 항목
             agreementList.forEachIndexed { index, item ->
