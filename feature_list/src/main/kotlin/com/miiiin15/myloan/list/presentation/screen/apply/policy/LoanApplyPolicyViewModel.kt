@@ -90,7 +90,7 @@ class LoanApplyPolicyViewModel(
             sendEvent(event)
 
             if (event is SingleEvent.SubmitSuccess) {
-                // TODO: 화면 이동
+                navManager.navigate(LoanApplyPolicyFragmentDirections.actionLoanApplyPolicyToLoanSuitability())
             }
         }
     }
