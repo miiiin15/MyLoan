@@ -2,6 +2,8 @@ package com.miiiin15.myloan.list.data.repository.fake
 
 import com.miiiin15.myloan.list.domain.repository.fake.HardCodedContentRepository
 import com.miiiin15.myloan.list.presentation.screen.apply.policy.AgreementItem
+import com.miiiin15.myloan.list.presentation.screen.apply.suitability.SuitabilityContent
+import com.miiiin15.myloan.list.presentation.screen.apply.suitability.SuitabilityListItem
 import kotlinx.collections.immutable.persistentListOf
 
 class HardCodedContentRepositoryImpl : HardCodedContentRepository {
@@ -19,6 +21,70 @@ class HardCodedContentRepositoryImpl : HardCodedContentRepository {
             AgreementItem(
                 "대출 계약 철회권 안내",
                 "대출 계약 후 일정 기간 내에 계약을 철회할 수 있는 권리가 있음을 안내받았으며, 이에 동의하시겠습니까?"
+            )
+        )
+    }
+
+    override fun getSuitabilityItems(): List<SuitabilityContent> {
+        return persistentListOf(
+            SuitabilityContent(
+                type = "normal",
+                title = "연령",
+                suitabilityList = persistentListOf(
+                    SuitabilityListItem("20대 이하", "01"),
+                    SuitabilityListItem("30대", "02"),
+                    SuitabilityListItem("40대", "03"),
+                    SuitabilityListItem("50대", "04"),
+                    SuitabilityListItem("60대 이상", "05"),
+                )
+            ),
+            SuitabilityContent(
+                type = "custom",
+                title = "대출 목적",
+                suitabilityList = persistentListOf(
+                    SuitabilityListItem("주택 구입", "01"),
+                    SuitabilityListItem("자동차 구입", "02"),
+                    SuitabilityListItem("학자금", "03"),
+                    SuitabilityListItem("개인 용도", "04"),
+                    SuitabilityListItem("기타", "05"),
+                )
+            ),
+            SuitabilityContent(
+                type = "custom",
+                title = "소득 수준",
+                suitabilityList = persistentListOf(
+                    SuitabilityListItem("600만원 이상 ~ 5,000만원 미만", "01"),
+                    SuitabilityListItem("5,000만원 이상 ~ 1억원 미만", "02"),
+                    SuitabilityListItem("1억원 이상", "03"),
+                    SuitabilityListItem("소득 없음", "04")
+                )
+            ),
+            SuitabilityContent(
+                type = "normal",
+                title = "부채",
+                suitabilityList = persistentListOf(
+                    SuitabilityListItem("없음", "01"),
+                    SuitabilityListItem("1,000만원 이하", "02"),
+                    SuitabilityListItem("1,000만원 초과 ~ 5,000만원 이하", "03"),
+                    SuitabilityListItem("5,000만원 초과", "04")
+                )
+            ),
+            SuitabilityContent(
+                type = "normal",
+                title = "신용 점수",
+                suitabilityList = persistentListOf(
+                    SuitabilityListItem("600점 이하", "01"),
+                    SuitabilityListItem("600점 초과", "01"),
+                    SuitabilityListItem("모름", "05")
+                )
+            ),
+            SuitabilityContent(
+                type = "normal",
+                title = "고정 지출",
+                suitabilityList = persistentListOf(
+                    SuitabilityListItem("연간 소득을 초과", "01"),
+                    SuitabilityListItem("연간 소득을 초과하지 않음", "02"),
+                )
             )
         )
     }
