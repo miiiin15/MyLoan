@@ -15,7 +15,6 @@
         android:animateLayoutChanges="true"
         android:background="?colorSurface"
         android:elevation="1dp"
-        android:fitsSystemWindows="true"
         android:orientation="horizontal"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent">
