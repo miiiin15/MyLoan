@@ -18,6 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,6 +46,8 @@ fun InputField(
     isMask: Boolean = false, // 마스킹 여부
     placeholder: String = "",
 ) {
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     var isFocused by remember { mutableStateOf(false) }
     val backgroundColor = if (disable) {
         MaterialTheme.colorScheme.outline
@@ -100,6 +104,10 @@ fun InputField(
                     .take(maxLength)
             }
             onValueChange(digits)
+            if (digits.length == maxLength) {
+                focusManager.clearFocus()
+                keyboardController?.hide()
+            }
         },
 
 
