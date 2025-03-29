@@ -13,6 +13,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -107,30 +108,36 @@ fun PolicyList(
                 } else {
                     MaterialTheme.colorScheme.primary
                 }
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = Dimen.spaceM, start = Dimen.spaceM, end = Dimen.spaceM)
-                        .height(Dimen.spaceXL)
-                        .clickable { policyCheckStates[index] = !policyCheckStates[index] }
-                ) {
-                    Checkbox(
-                        checked = policyCheckStates[index],
-                        modifier = Modifier.padding(end = Dimen.spaceS),
-                        onCheckedChange = null
-                    )
-                    TextDynamic(
-                        text = requiredText,
-                        color = requireTextColor
-                    )
-                    TextDynamic(
-                        text = policy.title,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                }
-                if (index < policyList.size - 1) {
-                    Spacer(modifier = Modifier.height(Dimen.spaceM))
+                key(policy.id) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                bottom = Dimen.spaceM,
+                                start = Dimen.spaceM,
+                                end = Dimen.spaceM
+                            )
+                            .height(Dimen.spaceXL)
+                            .clickable { policyCheckStates[index] = !policyCheckStates[index] }
+                    ) {
+                        Checkbox(
+                            checked = policyCheckStates[index],
+                            modifier = Modifier.padding(end = Dimen.spaceS),
+                            onCheckedChange = null
+                        )
+                        TextDynamic(
+                            text = requiredText,
+                            color = requireTextColor
+                        )
+                        TextDynamic(
+                            text = policy.title,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                    }
+                    if (index < policyList.size - 1) {
+                        Spacer(modifier = Modifier.height(Dimen.spaceM))
+                    }
                 }
             }
         }
