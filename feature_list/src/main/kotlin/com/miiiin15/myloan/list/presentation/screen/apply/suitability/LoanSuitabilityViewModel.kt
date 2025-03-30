@@ -34,7 +34,7 @@ class LoanSuitabilityViewModel(
     private val hardCodedContentRepository: HardCodedContentRepository,
 ) : AbstractMviViewModel<ViewIntent, ViewState, SingleEvent>() {
     override val viewState: StateFlow<ViewState>
-    val applyInfo = applyInfoRepository.getApplyAllInfo()
+    val applyInfo = applyInfoRepository.getApplyUser()
     val suitabilityItems = hardCodedContentRepository.getSuitabilityItems()
 
     init {

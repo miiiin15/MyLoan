@@ -6,6 +6,7 @@ import com.miiiin15.myloan.base.presentation.nav.NavManager
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseAction
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseState
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseViewModel
+import com.miiiin15.myloan.list.domain.model.ApplyUser
 import com.miiiin15.myloan.list.domain.model.mobileVerification.AuthConfirmation
 import com.miiiin15.myloan.list.domain.model.mobileVerification.ContactInfo
 import com.miiiin15.myloan.list.domain.model.mobileVerification.UserInfo
@@ -150,14 +151,12 @@ internal class MobileVerificationViewModel(
                 "applyNumber",
                 UUID.randomUUID().toString().substring(0, 10)
             )
-            applyInfoRepository.setApplyInfo("userName", _userInfo.value.name ?: "")
-            applyInfoRepository.setApplyInfo(
-                "userPhoneNumber",
-                _contactInfo.value.phoneNumber ?: ""
-            )
-            applyInfoRepository.setApplyInfo(
-                "userResidentialNumber",
-                _userInfo.value.birthDate + _userInfo.value.residentialNumber
+            applyInfoRepository.setApplyUser(
+                ApplyUser(
+                    userName = _userInfo.value.name ?: "",
+                    userPhoneNumber = _contactInfo.value.phoneNumber ?: "",
+                    userResidentialNumber = _userInfo.value.birthDate + _userInfo.value.residentialNumber
+                )
             )
             navManager.navigate(MobileVerificationFragmentDirections.actionMobileVerificationToLoanApplyPolicy())
         } ?: run {

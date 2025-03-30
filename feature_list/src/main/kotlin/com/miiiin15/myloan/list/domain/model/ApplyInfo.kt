@@ -6,8 +6,4 @@ data class ApplyInfo(
     var productType: String = "",
     var currentStep : String="",
     var applyNumber: String = "",
-    // 신청자 정보
-    var userName:String = "",
-    var userPhoneNumber: String = "",
-    var userResidentialNumber : String = "",
 )

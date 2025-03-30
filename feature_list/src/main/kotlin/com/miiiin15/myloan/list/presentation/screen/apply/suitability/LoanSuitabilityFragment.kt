@@ -26,6 +26,7 @@ import com.miiiin15.myloan.base.presentation.compose.composable.RadioButtonGroup
 import com.miiiin15.myloan.base.presentation.compose.composable.ShowAlert
 import com.miiiin15.myloan.base.presentation.ext.collectInLaunchedEffectWithLifecycle
 import com.miiiin15.myloan.list.domain.model.ApplyInfo
+import com.miiiin15.myloan.list.domain.model.ApplyUser
 import com.miiiin15.myloan.list.presentation.screen.apply.component.SuitabilityContentHeader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -118,7 +119,7 @@ fun SuitabilityScreen(
 @Composable
 fun SuitabilityContent(
     viewState: ViewState,
-    applyInfo: ApplyInfo,
+    applyInfo: ApplyUser,
     suitabilityContent: List<SuitabilityContent>,
     onSubmit: () -> Unit,
 ) {

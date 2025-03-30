@@ -1,11 +1,13 @@
 package com.miiiin15.myloan.list.data.repository
 
 import com.miiiin15.myloan.list.domain.model.ApplyInfo
+import com.miiiin15.myloan.list.domain.model.ApplyUser
 import com.miiiin15.myloan.list.domain.repository.ApplyInfoRepository
 import timber.log.Timber
 
 class ApplyInfoRepositoryImpl : ApplyInfoRepository {
     private var applyInfo: ApplyInfo? = null
+    private var applyUser: ApplyUser? = null
     private var applicantId: String? = null
 
     override fun setApplyAllInfo(info: ApplyInfo) {
@@ -13,21 +15,28 @@ class ApplyInfoRepositoryImpl : ApplyInfoRepository {
         applyInfo = info
     }
 
-    override fun getApplyAllInfo(): ApplyInfo? = applyInfo
+    override fun setApplyUser(user: ApplyUser) {
+        Timber.d("👇대출 신청자 정보 저장: $user")
+        applyUser = user
+    }
+
 
     override fun setApplyInfo(keyword: String, value: String) {
         Timber.d("👇 대출 신청 정보 저장: $keyword = $value")
         if (applyInfo == null) {
             applyInfo = ApplyInfo()
         }
+        if (applyUser == null) {
+            applyUser = ApplyUser()
+        }
         when (keyword) {
             "applicantId" -> applicantId = value
             "productType" -> applyInfo?.productType = value
             "currentStep" -> applyInfo?.currentStep = value
             "applyNumber" -> applyInfo?.applyNumber = value
-            "userName" -> applyInfo?.userName = value
-            "userPhoneNumber" -> applyInfo?.userPhoneNumber = value
-            "userResidentialNumber" -> applyInfo?.userResidentialNumber = value
+            "userName" -> applyUser?.userName = value
+            "userPhoneNumber" -> applyUser?.userPhoneNumber = value
+            "userResidentialNumber" -> applyUser?.userResidentialNumber = value
             else -> Timber.w("❌ 알 수 없는 키워드: $keyword")
         }
     }
@@ -40,9 +49,9 @@ class ApplyInfoRepositoryImpl : ApplyInfoRepository {
             "productType" -> applyInfo?.productType ?: ""
             "currentStep" -> applyInfo?.currentStep ?: ""
             "applyNumber" -> applyInfo?.applyNumber ?: ""
-            "userName" -> applyInfo?.userName ?: ""
-            "userPhoneNumber" -> applyInfo?.userPhoneNumber ?: ""
-            "userResidentialNumber" -> applyInfo?.userResidentialNumber ?: ""
+            "userName" -> applyUser?.userName ?: ""
+            "userPhoneNumber" -> applyUser?.userPhoneNumber ?: ""
+            "userResidentialNumber" -> applyUser?.userResidentialNumber ?: ""
             else -> {
                 Timber.w("❌ 알 수 없는 키워드: $keyword")
                 ""
@@ -50,7 +59,21 @@ class ApplyInfoRepositoryImpl : ApplyInfoRepository {
         }
     }
 
-    override fun clear() {
+    override fun getApplyAllInfo(): ApplyInfo? = applyInfo
+
+    override fun getApplyUser(): ApplyUser? = applyUser
+
+    override fun clearApplyInfo() {
         applyInfo = null
+    }
+
+    override fun clearApplyUser() {
+        applyUser = null
+    }
+
+    override fun clearAll() {
+        applyInfo = null
+        applyUser = null
+        applicantId = null
     }
 }

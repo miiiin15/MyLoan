@@ -19,7 +19,7 @@ internal class ProductDetailViewModel(
 ) : BaseViewModel<ProductDetailViewModel.UiState, ProductDetailViewModel.Action>(Loading) {
 
     init {
-        applyInfoRepository.clear()
+        applyInfoRepository.clearApplyInfo()
     }
 
     fun fetchProductDetail(productType: String) {
