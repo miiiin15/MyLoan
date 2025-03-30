@@ -23,6 +23,11 @@
         <action
             android:id="@+id/actionProductDetailToMobileVerification"
             app:destination="@id/mobileVerificationFragment" />
+
+        <action
+            android:id="@+id/actionProductDetailToLoanApplyPolicy"
+            app:destination="@id/loanApplyPolicyFragment" />
+
     </fragment>
 
     <fragment

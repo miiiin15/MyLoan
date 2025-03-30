@@ -40,6 +40,10 @@ internal class MobileVerificationViewModel(
 
     private var countdownJob: Job? = null
 
+    init {
+        applyInfoRepository.clearApplyUser()
+    }
+
     private fun startCountdown() {
         if (countdownJob?.isActive == true) {
             countdownJob?.cancel() // 이전 카운트 작업 취소
