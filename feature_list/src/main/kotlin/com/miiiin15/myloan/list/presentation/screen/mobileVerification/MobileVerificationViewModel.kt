@@ -162,7 +162,7 @@ internal class MobileVerificationViewModel(
                     userResidentialNumber = _userInfo.value.birthDate + _userInfo.value.residentialNumber
                 )
             )
-            navManager.navigate(MobileVerificationFragmentDirections.actionMobileVerificationToLoanApplyPolicy())
+            navManager.replace(  MobileVerificationFragmentDirections.actionMobileVerificationToLoanApplyPolicy())
         } ?: run {
             sendAction(Action.Failure("Access Token이 없습니다. 인증을 다시 시도해주세요."))
         }

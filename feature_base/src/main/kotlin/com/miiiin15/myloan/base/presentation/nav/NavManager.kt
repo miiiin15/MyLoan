@@ -1,15 +1,29 @@
 package com.miiiin15.myloan.base.presentation.nav
 
 import androidx.navigation.NavDirections
+import androidx.navigation.NavOptions
 
 class NavManager {
-    private var navEventListener: ((navDirections: NavDirections) -> Unit)? = null
+    private var navEventListener: ((navDirections: NavDirections, navOptions: NavOptions?) -> Unit)? =
+        null
+    var currentDestinationId: Int? = null
 
-    fun navigate(navDirections: NavDirections) {
-        navEventListener?.invoke(navDirections)
+    fun navigate(navDirections: NavDirections, navOptions: NavOptions? = null) {
+        navEventListener?.invoke(navDirections, navOptions)
     }
 
-    fun setOnNavEvent(navEventListener: (navDirections: NavDirections) -> Unit) {
+    fun replace(navDirections: NavDirections) {
+        currentDestinationId?.let { id ->
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(id, true)
+                .build()
+            navigate(navDirections, navOptions)
+        } ?: run {
+            navigate(navDirections)
+        }
+    }
+
+    fun setOnNavEvent(navEventListener: (navDirections: NavDirections, navOptions: NavOptions?) -> Unit) {
         this.navEventListener = navEventListener
     }
 }

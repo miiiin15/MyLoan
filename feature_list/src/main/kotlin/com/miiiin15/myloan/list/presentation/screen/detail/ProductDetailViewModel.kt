@@ -1,21 +1,21 @@
 package com.miiiin15.myloan.list.presentation.screen.detail
 
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavDirections
 import com.miiiin15.myloan.base.common.util.SharedPreferenceManager
 import com.miiiin15.myloan.base.domain.result.Result
 import com.miiiin15.myloan.base.presentation.nav.NavManager
-import com.miiiin15.myloan.base.presentation.viewmodel.BaseViewModel
-import com.miiiin15.myloan.base.presentation.viewmodel.BaseState
 import com.miiiin15.myloan.base.presentation.viewmodel.BaseAction
-import com.miiiin15.myloan.list.domain.model.ApplyUser
+import com.miiiin15.myloan.base.presentation.viewmodel.BaseState
+import com.miiiin15.myloan.base.presentation.viewmodel.BaseViewModel
 import com.miiiin15.myloan.list.domain.model.ProductDetail
 import com.miiiin15.myloan.list.domain.repository.ApplyInfoRepository
-import com.miiiin15.myloan.list.presentation.screen.detail.ProductDetailViewModel.UiState.*
 import com.miiiin15.myloan.list.domain.usecase.GetProductDetailUseCase
+import com.miiiin15.myloan.list.presentation.screen.detail.ProductDetailViewModel.UiState.DetailContent
+import com.miiiin15.myloan.list.presentation.screen.detail.ProductDetailViewModel.UiState.Error
+import com.miiiin15.myloan.list.presentation.screen.detail.ProductDetailViewModel.UiState.Loading
 import com.miiiin15.myloan.list.presentation.screen.mobileVerification.Action
-import com.miiiin15.myloan.list.presentation.screen.mobileVerification.MobileVerificationFragmentDirections
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 internal class ProductDetailViewModel(
     private val navManager: NavManager,
@@ -48,18 +48,23 @@ internal class ProductDetailViewModel(
     }
 
     fun onApplyButtonClick() {
-        val tokenTime  = sharedPreferenceManager.getString("accessToken")
+        val tokenTime = sharedPreferenceManager.getString("accessToken")
         val currentTime = System.currentTimeMillis()
-        val isOver12Hours = tokenTime?.let { currentTime - tokenTime.toLong() >= 12 * 60 * 60 * 1000 } ?: true
+        val isOver12Hours =
+            tokenTime?.let { currentTime - tokenTime.toLong() >= 12 * 60 * 60 * 1000 } ?: true
+        var navDirections: NavDirections? = null
+
         if (isOver12Hours) {
-            // 발급 시간 12시간 초과
-            println("❌ 발급 시간 12시간 초과, 모바일 인증 화면으로 이동")
-            navManager.navigate(ProductDetailFragmentDirections.actionProductDetailToMobileVerification())
+            // 발급 시간 12시간 초과: replace로 이동 (백스택 제거)
+            println("❌ 발급 시간 12시간 초과, 모바일 인증 화면으로 replace 이동")
+            navDirections =
+                ProductDetailFragmentDirections.actionProductDetailToMobileVerification()
         } else {
             // 발급 시간 12시간 미만
             println("⭕️ 발급 시간 12시간 미만, 대출 신청전 확인 화면으로 이동")
-            navManager.navigate(ProductDetailFragmentDirections.actionProductDetailToLoanApplyPolicy())
+            navDirections = ProductDetailFragmentDirections.actionProductDetailToLoanApplyPolicy()
         }
+        navManager.replace(navDirections)
     }
 
     fun clear() {

@@ -53,10 +53,10 @@ class NavHostActivity : BaseActivity(R.layout.activity_nav_host),
     }
 
     private fun initNavManager() {
-        navManager.setOnNavEvent {
+        navManager.setOnNavEvent { navDirections, navOptions ->
             val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment)
             val currentFragment = navHostFragment?.childFragmentManager?.fragments?.get(0)
-            currentFragment?.navigateSafe(it)
+            currentFragment?.navigateSafe(navDirections, navOptions)
         }
     }
 
@@ -65,12 +65,14 @@ class NavHostActivity : BaseActivity(R.layout.activity_nav_host),
         destination: NavDestination,
         arguments: Bundle?
     ) {
-       binding.bottomNav.visibility = when (destination.label) {
-           DESTINATION_PRODUCT_LIST_LABEL,
-           DESTINATION_APPLY_RESULT_LABEL,
-           DESTINATION_LOAN_RESUME_LABEL -> View.VISIBLE
-           else -> View.GONE
-       }
+        navManager.currentDestinationId = destination.id
+
+        binding.bottomNav.visibility = when (destination.label) {
+            DESTINATION_PRODUCT_LIST_LABEL,
+            DESTINATION_APPLY_RESULT_LABEL,
+            DESTINATION_LOAN_RESUME_LABEL -> View.VISIBLE
+            else -> View.GONE
+        }
     }
 }
 
