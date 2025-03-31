@@ -4,12 +4,11 @@ import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 
 class NavManager {
-    private var navEventListener: ((navDirections: NavDirections, navOptions: NavOptions?) -> Unit)? =
-        null
+    private var navEventListener: ((navDirections: NavDirections?, navOptions: NavOptions?, popBackStack: Boolean) -> Unit)? = null
     var currentDestinationId: Int? = null
 
     fun navigate(navDirections: NavDirections, navOptions: NavOptions? = null) {
-        navEventListener?.invoke(navDirections, navOptions)
+        navEventListener?.invoke(navDirections, navOptions, false)
     }
 
     fun replace(navDirections: NavDirections) {
@@ -23,7 +22,11 @@ class NavManager {
         }
     }
 
-    fun setOnNavEvent(navEventListener: (navDirections: NavDirections, navOptions: NavOptions?) -> Unit) {
+    fun popBackStack() {
+        navEventListener?.invoke(null, null, true)
+    }
+
+    fun setOnNavEvent(navEventListener: (navDirections: NavDirections?, navOptions: NavOptions?, popBackStack: Boolean) -> Unit) {
         this.navEventListener = navEventListener
     }
 }

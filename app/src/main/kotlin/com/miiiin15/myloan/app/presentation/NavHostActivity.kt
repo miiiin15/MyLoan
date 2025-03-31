@@ -6,6 +6,7 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 
@@ -52,13 +53,18 @@ class NavHostActivity : BaseActivity(R.layout.activity_nav_host),
         binding.bottomNav.setupWithNavController(navController)
     }
 
-    private fun initNavManager() {
-        navManager.setOnNavEvent { navDirections, navOptions ->
-            val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment)
-            val currentFragment = navHostFragment?.childFragmentManager?.fragments?.get(0)
-            currentFragment?.navigateSafe(navDirections, navOptions)
-        }
-    }
+   // NavHostActivity.kt
+   private fun initNavManager() {
+       navManager.setOnNavEvent { navDirections, navOptions, popBackStack ->
+           val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment)
+           val currentFragment = navHostFragment?.childFragmentManager?.fragments?.get(0)
+           if (popBackStack) {
+               currentFragment?.findNavController()?.popBackStack()
+           } else {
+               currentFragment?.navigateSafe(navDirections!!, navOptions)
+           }
+       }
+   }
 
     override fun onDestinationChanged(
         controller: NavController,
