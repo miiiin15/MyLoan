@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.miiiin15.myloan.base.R
 import com.miiiin15.myloan.base.common.res.Dimen
 import kotlin.math.absoluteValue
@@ -146,6 +147,7 @@ private fun HeaderBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .zIndex(1f)
             .height(Dimen.spaceXL)
             .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(horizontal = Dimen.screenContentPadding, vertical = Dimen.spaceXS),
