@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,10 +27,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miiii15.myloan.list.R
 import com.miiiin15.myloan.base.common.res.Dimen
 import com.miiiin15.myloan.base.presentation.activity.BaseFragment
+import com.miiiin15.myloan.base.presentation.compose.composable.AlertManager
 import com.miiiin15.myloan.base.presentation.compose.composable.BaseScreen
 import com.miiiin15.myloan.base.presentation.compose.composable.DoubleSwitch
 import com.miiiin15.myloan.base.presentation.compose.composable.GlobalAlertHost
-import com.miiiin15.myloan.base.presentation.compose.composable.AlertManager
 import com.miiiin15.myloan.base.presentation.compose.composable.LoadingDialog
 import com.miiiin15.myloan.base.presentation.compose.composable.TextDynamic
 import com.miiiin15.myloan.base.presentation.compose.composable.TextType
@@ -76,6 +77,10 @@ fun LoanApplyPolicyScreen(
         }
     }
     val scope = rememberCoroutineScope()
+
+    BackHandler(enabled = true) {
+        dispatch(ViewIntent.Back)
+    }
 
     // 채널에서 인텐트 수집
     LaunchedEffect(Unit) {

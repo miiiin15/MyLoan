@@ -1,9 +1,11 @@
 package com.miiiin15.myloan.list.presentation.screen.list
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,12 +23,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.common.collect.ImmutableList
 import com.miiii15.myloan.list.R
 import com.miiiin15.myloan.base.common.res.Dimen
 import com.miiiin15.myloan.base.presentation.activity.BaseFragment
+import com.miiiin15.myloan.base.presentation.compose.composable.AlertManager
 import com.miiiin15.myloan.base.presentation.compose.composable.DataNotFoundAnim
+import com.miiiin15.myloan.base.presentation.compose.composable.GlobalAlertHost
 import com.miiiin15.myloan.base.presentation.compose.composable.ProgressIndicator
 import com.miiiin15.myloan.list.domain.model.Product
 import com.miiiin15.myloan.list.presentation.screen.list.ProductListViewmodel.UiState
@@ -56,10 +61,24 @@ class ProductListFragment : BaseFragment() {
 @Composable
 private fun ProductListScreen(viewModel: ProductListViewmodel) {
     val uiState: UiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.fetchApplicant()
         viewModel.fetchProductList()
+    }
+
+    GlobalAlertHost()
+    BackHandler(enabled = true) {
+        AlertManager.show(
+            title = "알림",
+            message = "앱을 종료 하시겠습니까?",
+            buttonText = "종료",
+            onClick = {
+                val activity = (context as? Activity)
+                activity?.finish()
+            }
+        )
     }
 
     uiState.let {
