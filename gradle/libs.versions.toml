@@ -1,4 +1,5 @@
 [versions]
+activityCompose = "1.8.2"
 kotlin = "2.0.0"
 
 # KSP depends on specific Kotlin version, so it must be upgraded together with Kotlin (disabled in Renovate)
@@ -90,6 +91,7 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 constraintLayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintLayout" }
 appCompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
 recyclerView = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerView" }
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 composeMaterial = { module = "androidx.compose.material3:material3", version.ref = "materialCompose" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
@@ -130,7 +132,7 @@ extJunit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVe
 [bundles]
 retrofit = ["retrofitCore", "kotlinxSerializationConverter", "serializationJson", "okhttp", "okhttpInterceptor"]
 koin = ["koin", "koinNavigation"]
-compose = ["composeUI", "tooling","toolingPreview", "lottie", "coil"]
+compose = ["composeUI", "activity-compose", "tooling", "toolingPreview", "lottie", "coil"]
 lifecycle = ["viewmodelKtx", "livedataKtx", "livedataRuntime"]
 navigation = ["navigationFragment", "navigationUiKtx"]
 room = ["roomKtx", "roomRuntime"]
