@@ -3,56 +3,58 @@ package com.miiiin15.myloan.base.presentation.compose.composable
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import timber.log.Timber
+import androidx.compose.runtime.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
-private var showDialogState = mutableStateOf(false)
+object AlertManager {
+    private val _alertFlow = MutableSharedFlow<AlertData>(extraBufferCapacity = 1)
+    val alertFlow = _alertFlow.asSharedFlow()
 
-@Composable
-fun ShowAlert(
-    timestamp: Long = 0L,
-    title: String = "알림",
-    message: String,
-    buttonText: String = "확인",
-    onDismiss: () -> Unit = { }
-) {
-    showDialogState.value = true
-
-    CustomAlert(
-        timestamp,
-        title,
-        message,
-        buttonText,
-        onDismiss
-    )
+    fun show(
+        title: String = "알림",
+        message: String,
+        buttonText: String = "확인",
+        onDismiss: (() -> Unit)? = null,
+        onClick: (() -> Unit)? = null
+    ) {
+        _alertFlow.tryEmit(AlertData(title, message, buttonText, onDismiss, onClick))
+    }
 }
 
-fun hideAlert() {
-    showDialogState.value = false
-}
+data class AlertData(
+    val title: String,
+    val message: String,
+    val buttonText: String,
+    val onDismiss: (() -> Unit)?,
+    val onClick: (() -> Unit)?
+)
 
 @Composable
-fun CustomAlert(
-    timestamp: Long,
-    title: String,
-    message: String,
-    buttonText: String,
-    onDismiss: () -> Unit
-) {
-    if (showDialogState.value) {
-        Timber.d("📣 ShowAlert($timestamp) : $message")
+fun GlobalAlertHost() {
+    var currentAlert by remember { mutableStateOf<AlertData?>(null) }
+
+    LaunchedEffect(Unit) {
+        AlertManager.alertFlow.collect { alert ->
+            currentAlert = alert
+        }
+    }
+
+    currentAlert?.let { alert ->
         AlertDialog(
-            onDismissRequest = { onDismiss.invoke() },
-            title = { TextDynamic(title) },
-            text = { TextDynamic(message) },
+            onDismissRequest = {
+                currentAlert = null
+                alert.onDismiss?.invoke()
+            },
+            title = { TextDynamic(alert.title) },
+            text = { TextDynamic(alert.message) },
             confirmButton = {
                 Button(onClick = {
-                    onDismiss.invoke()
-                    hideAlert()
+                    currentAlert = null
+                    alert.onClick?.invoke()
                 }) {
                     TextDynamic(
-                        text = buttonText,
+                        text = alert.buttonText,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 }

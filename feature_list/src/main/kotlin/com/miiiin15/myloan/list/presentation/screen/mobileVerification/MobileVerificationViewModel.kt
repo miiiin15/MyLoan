@@ -148,6 +148,9 @@ internal class MobileVerificationViewModel(
         sendAction(Action.Initialize(""))
     }
 
+    fun popBackStack() {
+        navManager.popBackStack()
+    }
 
     fun onCompleteClick() {
         sharedPreferenceManager.getString("accessToken")?.let { _ ->

@@ -21,12 +21,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miiii15.myloan.list.R
 import com.miiiin15.myloan.base.common.res.Dimen
 import com.miiiin15.myloan.base.presentation.activity.BaseFragment
+import com.miiiin15.myloan.base.presentation.compose.composable.AlertManager
 import com.miiiin15.myloan.base.presentation.compose.composable.BaseScreen
 import com.miiiin15.myloan.base.presentation.compose.composable.InputField
 import com.miiiin15.myloan.base.presentation.compose.composable.InputType
 import com.miiiin15.myloan.base.presentation.compose.composable.ProgressIndicator
 import com.miiiin15.myloan.base.presentation.compose.composable.SelectField
-import com.miiiin15.myloan.base.presentation.compose.composable.ShowAlert
+import com.miiiin15.myloan.base.presentation.compose.composable.GlobalAlertHost
 import com.miiiin15.myloan.base.presentation.compose.composable.TextDynamic
 import com.miiiin15.myloan.list.domain.model.PolicyItem
 import com.miiiin15.myloan.list.domain.model.mobileVerification.ContactInfo
@@ -95,6 +96,7 @@ private fun MobileVerificationScreen(viewModel: MobileVerificationViewModel) {
         )
     )
 
+    GlobalAlertHost()
     uiState.let {
         when (it) {
             is UiState.Failure, is UiState.CodeVerifyFailure -> {
@@ -103,13 +105,8 @@ private fun MobileVerificationScreen(viewModel: MobileVerificationViewModel) {
                     is UiState.CodeVerifyFailure -> it.errorMessage
                     else -> "알 수 없는 오류가 발생했습니다."
                 }
-                val timestamp = when (it) {
-                    is UiState.Failure -> it.timestamp
-                    is UiState.CodeVerifyFailure -> it.timestamp
-                    else -> 0L
-                }
-                ShowAlert(
-                    timestamp = timestamp,
+
+                AlertManager.show(
                     title = "오류",
                     message = errorMessage,
                     buttonText = "닫기",
@@ -126,6 +123,7 @@ private fun MobileVerificationScreen(viewModel: MobileVerificationViewModel) {
         modifier = Modifier
             .padding(horizontal = Dimen.screenContentPadding),
         buttonEnabled = isVerificationConfirmed && isAllPolicyAgreed.value,
+        onBackClick = viewModel::popBackStack,
         onButtonClick = viewModel::onCompleteClick,
         content = {
             // 약관 동의
