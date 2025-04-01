@@ -73,12 +73,17 @@ class LoanApplyPolicyViewModel(
 
     }
 
+    fun backClicked(){
+        navManager.popBackStack()
+    }
+
     private fun Flow<PartialStateChange>.sendSingleEvent(): Flow<PartialStateChange> {
         return onEach { change ->
             val event = when (change) {
                 is PartialStateChange.Policy.Error -> SingleEvent.Failure(change.errorMessage)
                 is PartialStateChange.Submit.Failure -> SingleEvent.Failure(change.errorMessage)
                 is PartialStateChange.Submit.Success -> SingleEvent.SubmitSuccess
+                is PartialStateChange.BackClicked -> SingleEvent.BackAlert("대출 신청이 진행중입니다. 홈화면으로 돌아가시겠습니까?")
 
                 PartialStateChange.Policy.Loading -> return@onEach
                 is PartialStateChange.Policy.Data -> return@onEach
@@ -131,6 +136,9 @@ class LoanApplyPolicyViewModel(
         val initialFlow = filter { it is ViewIntent.Initial }
             .map<ViewIntent, PartialStateChange> { PartialStateChange.Policy.Data(fakePolicy) }
             .onStart { emit(PartialStateChange.Policy.Loading) }
+
+        val backClickFlow = filter { it is ViewIntent.Back }
+            .map { PartialStateChange.BackClicked(true) }
 
         val policyCheckFlow = filter { it is ViewIntent.PolicyChecked }
             .map<ViewIntent, PartialStateChange> { intent ->
@@ -190,6 +198,7 @@ class LoanApplyPolicyViewModel(
 
         return merge(
             initialFlow,
+            backClickFlow,
             policyCheckFlow,
             agreementCheckFlow,
             validateFlow,

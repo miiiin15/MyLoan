@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -16,11 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -28,24 +27,22 @@ import com.miiii15.myloan.list.R
 import com.miiiin15.myloan.base.common.res.Dimen
 import com.miiiin15.myloan.base.presentation.activity.BaseFragment
 import com.miiiin15.myloan.base.presentation.compose.composable.BaseScreen
+import com.miiiin15.myloan.base.presentation.compose.composable.DoubleSwitch
+import com.miiiin15.myloan.base.presentation.compose.composable.GlobalAlertHost
+import com.miiiin15.myloan.base.presentation.compose.composable.AlertManager
+import com.miiiin15.myloan.base.presentation.compose.composable.LoadingDialog
 import com.miiiin15.myloan.base.presentation.compose.composable.TextDynamic
 import com.miiiin15.myloan.base.presentation.compose.composable.TextType
+import com.miiiin15.myloan.base.presentation.ext.collectInLaunchedEffectWithLifecycle
 import com.miiiin15.myloan.list.presentation.component.PolicyList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.withContext
 import org.koin.androidx.navigation.koinNavGraphViewModel
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import com.miiiin15.myloan.base.presentation.compose.composable.DoubleSwitch
-import com.miiiin15.myloan.base.presentation.compose.composable.LoadingDialog
-import com.miiiin15.myloan.base.presentation.compose.composable.ShowAlert
-import com.miiiin15.myloan.base.presentation.ext.collectInLaunchedEffectWithLifecycle
-import kotlinx.coroutines.launch
 
 class LoanApplyPolicyFragment : BaseFragment() {
 
@@ -64,11 +61,6 @@ class LoanApplyPolicyFragment : BaseFragment() {
             }
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-//        viewModel.clear()
-    }
 }
 
 @Composable
@@ -78,8 +70,6 @@ fun LoanApplyPolicyScreen(
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
     // ViewIntent를 무제한으로 담을 수 있는 Channel을 Compose recomposition 시에도 재사용하도록 remember로 생성
     val intentChannel = remember { Channel<ViewIntent>(Channel.UNLIMITED) }
-    var showAlert by remember { mutableStateOf(false) }
-    var alertMessage by remember { mutableStateOf("") }
     val dispatch = remember {
         { intent: ViewIntent ->
             intentChannel.trySend(intent).getOrThrow()
@@ -105,32 +95,31 @@ fun LoanApplyPolicyScreen(
         dispatch(ViewIntent.Validate)
     }
 
-
+    GlobalAlertHost()
     // 단일 이벤트 수집
     viewModel.singleEvent.collectInLaunchedEffectWithLifecycle { event ->
         when (event) {
             is SingleEvent.Failure -> {
-                scope.launch {
-                    val errorMessage = event.errorMessage
-                    alertMessage = errorMessage
-                    showAlert = true
-                }
+                AlertManager.show(
+                    title = "오류",
+                    message = event.errorMessage,
+                    buttonText = "닫기",
+                )
+            }
+
+            is SingleEvent.BackAlert -> {
+                AlertManager.show(
+                    title = "알림",
+                    message = event.message,
+                    buttonText = "확인",
+                    onClick = { viewModel.backClicked() }
+                )
             }
 
             else -> {}
         }
     }
 
-    // TODO: 구조 개선 필요
-    if (showAlert) {
-        ShowAlert(
-            timestamp = System.currentTimeMillis(),
-            title = "오류",
-            message = alertMessage,
-            buttonText = "닫기",
-            onDismiss = { showAlert = false }
-        )
-    }
 
     // 화면 구성
     LoanApplyPolicyContent(
@@ -140,6 +129,7 @@ fun LoanApplyPolicyScreen(
         onAgreementCheck = { index, checked ->
             dispatch(ViewIntent.AgreementCheck(index, checked))
         },
+        onBackClick = { dispatch(ViewIntent.Back) },
         onSubmit = { dispatch(ViewIntent.Submit) }
     )
 }
@@ -150,11 +140,11 @@ fun LoanApplyPolicyContent(
     onPolicyCheck: (List<String>, Boolean) -> Unit,
     agreementList: List<AgreementItem>,
     onAgreementCheck: (Int, Boolean) -> Unit,
+    onBackClick: () -> Unit,
     onSubmit: () -> Unit,
 ) {
 
     LoadingDialog(show = viewState.isLoading)
-
     BaseScreen(
         title = "대출 신청 전 동의",
         modifier = Modifier
@@ -181,6 +171,7 @@ fun LoanApplyPolicyContent(
         },
         buttonEnabled = viewState.isValidate,
         buttonText = "다음",
+        onBackClick = onBackClick,
         onButtonClick = onSubmit,
     )
 }

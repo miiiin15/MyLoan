@@ -27,6 +27,7 @@ data class SuitabilityListItem(
 @Immutable
 sealed interface ViewIntent : MviIntent {
     object Initial : ViewIntent
+    object Back : ViewIntent
     data class SuitabilityCheck(val index: Int, val checked: Boolean) : ViewIntent
     object Validate : ViewIntent
     object Submit : ViewIntent
@@ -56,9 +57,15 @@ data class ViewState(
 sealed interface PartialStateChange {
     fun reduce(viewState: ViewState): ViewState
 
-    sealed interface SuitabilitySetting: PartialStateChange{
+    data class BackClicked(val isBack: Boolean) :
+        PartialStateChange {
+        override fun reduce(viewState: ViewState): ViewState =
+            viewState.copy(isLoading = false, isSubmitting = false, isSubmitted = false)
+    }
+
+    sealed interface SuitabilitySetting : PartialStateChange {
         object Setting : SuitabilitySetting
-        object Sucess: SuitabilitySetting
+        object Sucess : SuitabilitySetting
 
         override fun reduce(viewState: ViewState): ViewState {
             when (this) {
@@ -78,4 +85,5 @@ sealed interface PartialStateChange {
 
 sealed interface SingleEvent : MviSingleEvent {
     data class Failure(val errorMessage: String) : SingleEvent
+    data class BackAlert(val message: String) :SingleEvent
 }

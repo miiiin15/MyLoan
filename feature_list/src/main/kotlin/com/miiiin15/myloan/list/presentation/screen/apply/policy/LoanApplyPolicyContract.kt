@@ -21,6 +21,7 @@ data class AgreementItem(
 @Immutable
 sealed interface ViewIntent : MviIntent {
     object Initial : ViewIntent
+    object Back : ViewIntent
     data class PolicyChecked(val checkedList: List<String>, val allPolicyChecked: Boolean) :
         ViewIntent
 
@@ -61,6 +62,11 @@ data class ViewState(
 // 부분 상태 변화
 sealed interface PartialStateChange {
     fun reduce(viewState: ViewState): ViewState
+
+    data class BackClicked(val isBack: Boolean) : PartialStateChange {
+        override fun reduce(viewState: ViewState): ViewState =
+            viewState.copy(isLoading = false, isSubmitting = false, isSubmitted = false)
+    }
 
     sealed interface Policy : PartialStateChange {
         object Loading : Policy
@@ -139,5 +145,6 @@ sealed interface PartialStateChange {
 // 일회성 UI 이벤트 alert
 sealed interface SingleEvent : MviSingleEvent {
     data class Failure(val errorMessage: String) : SingleEvent
+    data class BackAlert(val message: String) : SingleEvent
     object SubmitSuccess : SingleEvent
 }
