@@ -27,7 +27,7 @@ android {
 
         versionCode = 1
         versionName = "0.0.1" // SemVer (Major.Minor.Patch)
-        minSdk = 28
+        minSdk = 31
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled = true
@@ -69,6 +69,13 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
+    packagingOptions {
+        resources {
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
+        }
+    }
+
     @Suppress("UnstableApiUsage")
     testOptions {
         unitTests.isReturnDefaultValues = true
@@ -82,6 +89,8 @@ dependencies {
     implementation(projects.featureList)
     implementation(projects.featureResult)
     implementation(projects.featureResume)
+
+    androidTestImplementation(libs.bundles.test)
 }
 
 fun ApplicationDefaultConfig.buildConfigFieldFromGradleProperty(gradlePropertyName: String) {

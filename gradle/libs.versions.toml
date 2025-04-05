@@ -12,7 +12,7 @@ kotlinCompilerExtensionVersion = "1.5.13"
 
 compileSdk = "35"
 kotlinxCollectionsImmutable = "0.3.5"
-minSdk = "26"
+minSdk = "31"
 
 navigation = "2.9.0"
 testLogger = "3.2.0"
@@ -113,9 +113,9 @@ roomCompiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 accompanistFlowLayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanistFlowLayout" }
 detektFormatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 konsist = "com.lemonappdev:konsist:0.16.0"
-firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
-firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx" }
-firebase-database-ktx = { module = "com.google.firebase:firebase-database-ktx" }
+firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx", version = "21.6.2" }
+firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx", version = "25.0.0" }
+firebase-database-ktx = { module = "com.google.firebase:firebase-database-ktx", version = "21.0.0" }
 
 # Test dependencies
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -127,6 +127,7 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 coreTesting = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
 junitJupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junitJupiterEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+composeUiTestJunit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 extJunit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 
 [bundles]
@@ -138,4 +139,4 @@ navigation = ["navigationFragment", "navigationUiKtx"]
 room = ["roomKtx", "roomRuntime"]
 firebase = ["firebase-analytics-ktx", "firebase-firestore-ktx", "firebase-database-ktx"]
 test = ["testCoroutines", "kluent", "testRunner", "espresso", "mockk", "coreTesting", "junitJupiterApi",
-    "junitJupiterEngine", "konsist"]
+    "junitJupiterEngine", "konsist","composeUiTestJunit4"]
