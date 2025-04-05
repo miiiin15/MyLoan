@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -123,7 +124,7 @@ fun BaseScreen(
             }
         }
         // 하단 버튼
-        if (scrollState.value == scrollState.maxValue || scrollState.maxValue == 0) {
+       if (scrollState.value == scrollState.maxValue || scrollState.maxValue == 0) {
             onButtonClick.let {
                 BottomButton(
                     text = buttonText,
@@ -132,7 +133,7 @@ fun BaseScreen(
                     modifier = Modifier.align(Alignment.BottomCenter)
                 )
             }
-        }
+       }
 
     }
 }
@@ -199,8 +200,8 @@ private fun BottomButton(
     ) {
         Button(
             onClick = onClick,
+            modifier = Modifier.fillMaxWidth().testTag("Base_Bottom_Button"),
             enabled = enable,
-            modifier = Modifier.fillMaxWidth()
         ) {
             TextDynamic(text = text, color = MaterialTheme.colorScheme.onPrimary)
         }

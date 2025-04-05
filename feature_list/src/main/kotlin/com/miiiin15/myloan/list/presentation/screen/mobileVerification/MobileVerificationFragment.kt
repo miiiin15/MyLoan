@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.testTag
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miiii15.myloan.list.R
 import com.miiiin15.myloan.base.common.res.Dimen
@@ -256,6 +257,8 @@ fun MobileVerificationPhoneInput(
                 .align(Alignment.CenterVertically)
                 .height(Dimen.buttonHeight)
                 .padding(start = Dimen.spaceM)
+                .testTag("requestButton")
+
         ) {
             TextDynamic(
                 text = buttonText,
@@ -303,6 +306,7 @@ fun MobileVerificationCodeInput(
                 .align(Alignment.CenterVertically)
                 .height(Dimen.buttonHeight)
                 .padding(start = Dimen.spaceM)
+                .testTag("confirmButton")
         ) {
             TextDynamic(text = "확인", color = MaterialTheme.colorScheme.onPrimary)
         }
