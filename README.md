@@ -6,6 +6,7 @@
 - **UI**: compose, material3
 - **빌드**: Multi Module: 기능별(feature) 분리, Precompiled Scripts
 - **의존성 주입(DI)**: koin
+- **테스트**: JUnit, Jetpack Compose UI Test
 - **SDK**:
   - **Firebase**: Realtime Database, firestore
   - **Logging**: Timber
