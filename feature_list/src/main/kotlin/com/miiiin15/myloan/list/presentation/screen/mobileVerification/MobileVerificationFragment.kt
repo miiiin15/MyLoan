@@ -55,7 +55,9 @@ class MobileVerificationFragment : BaseFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.clear()
+        if (isRemoving) {
+            viewModel.clear()
+        }
     }
 }
 
