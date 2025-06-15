@@ -16,6 +16,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -35,8 +37,13 @@ fun PolicyList(
     onClick: () -> Unit = {}
 ) {
 
-    val policyCheckStates =
-        remember(policyList) { mutableStateListOf(*Array(policyList.size) { false }) }
+    val policyCheckStates = rememberSaveable(
+        policyList,
+        saver = listSaver(
+            save = { it.toList() },
+            restore = { mutableStateListOf(*it.toTypedArray()) }
+        )
+    ) { mutableStateListOf(*Array(policyList.size) { false }) }
     val requiredIndexes =
         policyList.mapIndexedNotNull { idx, item -> if (item.required) idx else null }
     val allRequiredChecked = requiredIndexes.all { policyCheckStates[it] }
