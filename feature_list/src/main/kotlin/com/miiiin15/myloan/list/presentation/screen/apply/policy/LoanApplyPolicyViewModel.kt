@@ -95,7 +95,20 @@ class LoanApplyPolicyViewModel(
             sendEvent(event)
 
             if (event is SingleEvent.SubmitSuccess) {
-                navManager.replace(LoanApplyPolicyFragmentDirections.actionLoanApplyPolicyToLoanSuitability())
+                val productType = applyInfoRepository.getApplyInfo("productType")
+                when (productType) {
+                    "LOAN_CREDIT" -> {
+                        // TODO:  신용대출 프로세스
+                        sendEvent(SingleEvent.Failure("준비 중 입니다."))
+                    }
+                    "LOAN_DEPOSIT" -> {
+                        // 담보대출
+                        navManager.replace(LoanApplyPolicyFragmentDirections.actionLoanApplyPolicyToLoanSuitability())
+                    }
+                    else -> {
+                        sendEvent(SingleEvent.Failure("알 수 없는 상품 유형입니다."))
+                    }
+                }
             }
         }
     }
