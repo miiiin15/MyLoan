@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/listNavGraph"
     app:startDestination="@id/productListFragment">
+
+    <!-- 상품 목록-->
     <fragment
         android:id="@+id/productListFragment"
         android:name="com.miiiin15.myloan.list.presentation.screen.list.ProductListFragment"
@@ -12,6 +14,7 @@
             app:destination="@id/productDetailFragment" />
     </fragment>
 
+    <!-- 상품 상세 -->
     <fragment
         android:id="@+id/productDetailFragment"
         android:name="com.miiiin15.myloan.list.presentation.screen.detail.ProductDetailFragment"
@@ -30,6 +33,7 @@
 
     </fragment>
 
+    <!-- 휴대폰 인증 -->
     <fragment
         android:id="@+id/mobileVerificationFragment"
         android:name="com.miiiin15.myloan.list.presentation.screen.mobileVerification.MobileVerificationFragment"
@@ -39,6 +43,7 @@
             app:destination="@id/loanApplyPolicyFragment" />
     </fragment>
 
+    <!-- 대출 신청 정책 동의 -->
     <fragment
         android:id="@+id/loanApplyPolicyFragment"
         android:name="com.miiiin15.myloan.list.presentation.screen.apply.policy.LoanApplyPolicyFragment"
@@ -46,8 +51,19 @@
         <action
             android:id="@+id/actionLoanApplyPolicyToLoanSuitability"
             app:destination="@id/loanSuitabilityFragment" />
+
+        <action
+            android:id="@+id/actionLoanApplyPolicyToLoanApplyCheck"
+            app:destination="@id/loanApplyCheckFragment" />
     </fragment>
 
+    <!-- 대출 신청 사전 확인 -->
+    <fragment
+        android:id="@+id/loanApplyCheckFragment"
+        android:name="com.miiiin15.myloan.list.presentation.screen.apply.check.LoanApplyCheckFragment"
+        android:label="LoanApplyCheckFragment"></fragment>
+
+    <!-- 대출 적합성 평가 -->
     <fragment
         android:id="@+id/loanSuitabilityFragment"
         android:name="com.miiiin15.myloan.list.presentation.screen.apply.suitability.LoanSuitabilityFragment"

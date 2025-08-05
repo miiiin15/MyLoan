@@ -98,8 +98,8 @@ class LoanApplyPolicyViewModel(
                 val productType = applyInfoRepository.getApplyInfo("productType")
                 when (productType) {
                     "LOAN_CREDIT" -> {
-                        // TODO:  신용대출 프로세스
-                        sendEvent(SingleEvent.Failure("준비 중 입니다."))
+                        // 신용대출
+                        navManager.replace(LoanApplyPolicyFragmentDirections.actionLoanApplyPolicyToLoanApplyCheck())
                     }
                     "LOAN_DEPOSIT" -> {
                         // 담보대출
