@@ -1,6 +1,7 @@
 package com.miiiin15.myloan.list.data.repository.fake
 
 import com.miiiin15.myloan.list.domain.repository.fake.HardCodedContentRepository
+import com.miiiin15.myloan.list.presentation.screen.apply.check.CheckItem
 import com.miiiin15.myloan.list.presentation.screen.apply.policy.AgreementItem
 import com.miiiin15.myloan.list.presentation.screen.apply.suitability.SuitabilityContent
 import com.miiiin15.myloan.list.presentation.screen.apply.suitability.SuitabilityListItem
@@ -22,6 +23,15 @@ class HardCodedContentRepositoryImpl : HardCodedContentRepository {
                 "대출 계약 철회권 안내",
                 "대출 계약 후 일정 기간 내에 계약을 철회할 수 있는 권리가 있음을 안내받았으며, 이에 동의하시겠습니까?"
             )
+        )
+    }
+
+    override fun getApplyCheckItems(): List<CheckItem> {
+        return persistentListOf(
+            CheckItem("동시대출 불가","타기관에 대출심사를 진행중이신가요?"),
+            CheckItem("보이스피싱 안내","혹시 지금 진행하시는 대출 시, 금융회사 직원이라며 전화나 문자를 받아 진행하고 계신가요?"),
+            CheckItem("보이스피싱 안내","혹시 신용등급 상향, 대출보증비 등의 수수료라며 돈을 먼저 입금하라고 하던가요?"),
+            CheckItem("보이스피싱 안내","혹시 고금리 대출을 받고, 상환하면 저금리로 대출이 가능하다는 얘기를 하던가요?"),
         )
     }
 
