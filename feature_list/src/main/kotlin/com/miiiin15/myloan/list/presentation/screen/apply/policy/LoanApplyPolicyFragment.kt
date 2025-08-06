@@ -5,13 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,22 +14,17 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miiii15.myloan.list.R
 import com.miiiin15.myloan.base.common.res.Dimen
 import com.miiiin15.myloan.base.presentation.activity.BaseFragment
 import com.miiiin15.myloan.base.presentation.compose.composable.AlertManager
 import com.miiiin15.myloan.base.presentation.compose.composable.BaseScreen
-import com.miiiin15.myloan.base.presentation.compose.composable.DoubleSwitch
 import com.miiiin15.myloan.base.presentation.compose.composable.GlobalAlertHost
 import com.miiiin15.myloan.base.presentation.compose.composable.LoadingDialog
-import com.miiiin15.myloan.base.presentation.compose.composable.TextDynamic
-import com.miiiin15.myloan.base.presentation.compose.composable.TextType
 import com.miiiin15.myloan.base.presentation.ext.collectInLaunchedEffectWithLifecycle
+import com.miiiin15.myloan.list.presentation.component.CheckItemRow
 import com.miiiin15.myloan.list.presentation.component.PolicyList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -164,7 +154,7 @@ fun LoanApplyPolicyContent(
             // 동의 항목
             agreementList.forEachIndexed { index, item ->
                 key(index) {
-                    AgreeContent(
+                    CheckItemRow(
                         title = item.title,
                         contents = item.content,
                         isChecked = viewState.agreementCheckedList.getOrNull(index) ?: false,
@@ -180,49 +170,3 @@ fun LoanApplyPolicyContent(
         onButtonClick = onSubmit,
     )
 }
-
-@Composable
-fun AgreeContent(
-    title: String,
-    contents: String,
-    isChecked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
-) {
-    val outlineColor = MaterialTheme.colorScheme.outline
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.onPrimary)
-            .drawBehind {
-                // 아래쪽 선
-                drawLine(
-                    color = outlineColor,
-                    start = Offset(0f, size.height),
-                    end = Offset(size.width, size.height),
-                    strokeWidth = Dimen.spaceS.value
-                )
-            },
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = Dimen.screenContentPadding, vertical = Dimen.spaceM)
-        ) {
-            TextDynamic(title, type = TextType.BodyMedium, fontWeight = FontWeight.Bold)
-            TextDynamic(
-                contents,
-                type = TextType.BodySmall,
-                color = MaterialTheme.colorScheme.secondary
-            )
-            DoubleSwitch(
-                modifier = Modifier.padding(top = Dimen.spaceM),
-                isChecked = isChecked,
-                onClick = onCheckedChange,
-                positiveText = "동의",
-                negativeText = "미동의"
-            )
-        }
-    }
-}
-
