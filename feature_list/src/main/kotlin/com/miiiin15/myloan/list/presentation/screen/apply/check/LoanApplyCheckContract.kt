@@ -6,6 +6,12 @@ import com.miiiin15.myloan.base.presentation.viewmodel2.MviSingleEvent
 import com.miiiin15.myloan.base.presentation.viewmodel2.MviViewState
 
 @Immutable
+data class CheckItem(
+    val title: String,
+    val content: String,
+)
+
+@Immutable
 sealed interface ViewIntent : MviIntent {
     object Initial : ViewIntent
     object Back : ViewIntent
@@ -27,7 +33,7 @@ data class ViewState(
     companion object Factory {
         fun initial(): ViewState {
             return ViewState(
-                checkedList = listOf(false, false, false, false),
+                checkedList = listOf(true, true, true, true),
                 isAllChecked = false,
                 isLoading = false,
                 isValidate = false,
@@ -41,6 +47,11 @@ data class ViewState(
 
 sealed interface PartialStateChange {
     fun reduce(viewState: ViewState): ViewState
+
+    data object Initial : PartialStateChange {
+        override fun reduce(viewState: ViewState): ViewState =
+            viewState.copy(isLoading = false)
+    }
 
     data class BackClicked(val isBack: Boolean) : PartialStateChange {
         override fun reduce(viewState: ViewState): ViewState =
