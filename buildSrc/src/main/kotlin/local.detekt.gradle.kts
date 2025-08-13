@@ -4,9 +4,9 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
 }
 
-repositories {
-    mavenCentral()
-}
+//repositories {
+//    mavenCentral()
+//}
 
 val detektCheck by tasks.registering(Detekt::class) {
     description = "Checks that sourcecode satisfies detekt rules."
