@@ -58,6 +58,12 @@ coreTesting = "2.2.0"
 junitVersion = "1.2.1"
 googleGmsGoogleServices = "4.4.2"
 
+ksp = "2.2.20-2.0.4"
+protobuf = "4.29.2"
+androidxMacroBenchmark = "1.3.4"
+truth = "1.4.4"
+
+
 [plugins]
 # Search Gradle Plugins https://plugins.gradle.org/
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -116,6 +122,16 @@ konsist = "com.lemonappdev:konsist:0.16.0"
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx", version = "21.6.2" }
 firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx", version = "25.0.0" }
 firebase-database-ktx = { module = "com.google.firebase:firebase-database-ktx", version = "21.0.0" }
+
+# Dependencies of the included build-logic
+android-gradleApiPlugin = { group = "com.android.tools.build", name = "gradle-api", version.ref = "androidGradlePlugin" }
+#android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
+compose-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
+truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
+
 
 # Test dependencies
 junit = { module = "junit:junit", version.ref = "junit" }
