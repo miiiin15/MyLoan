@@ -24,6 +24,8 @@ dependencies {
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.room.gradlePlugin)
+    compileOnly(libs.spotless)
+    compileOnly(libs.detekt)
     implementation(libs.truth)
 }
 
@@ -35,5 +37,30 @@ tasks {
 }
 
 gradlePlugin {
-    plugins {}
+    plugins {
+        register("appConvention") {
+            id = "convention.app"
+            implementationClass = "AppConventionPlugin"
+        }
+        register("libraryConvention") {
+            id = "convention.library"
+            implementationClass = "LibraryConventionPlugin"
+        }
+        register("kotlinConvention") {
+            id = "convention.kotlin"
+            implementationClass = "KotlinConventionPlugin"
+        }
+        register("testConvention") {
+            id = "convention.test"
+            implementationClass = "TestConventionPlugin"
+        }
+        register("spotlessConvention") {
+            id = "convention.spotless"
+            implementationClass = "SpotlessConventionPlugin"
+        }
+        register("detektConvention") {
+            id = "convention.detekt"
+            implementationClass = "DetektConventionPlugin"
+        }
+    }
 }
