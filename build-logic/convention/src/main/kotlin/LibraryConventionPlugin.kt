@@ -6,12 +6,14 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
+import org.gradle.kotlin.dsl.apply
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 class LibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
-        pluginManager.apply("com.android.library")
-        pluginManager.apply("org.jetbrains.kotlin.android")
-        pluginManager.apply("com.google.devtools.ksp")
+        apply(plugin = "com.android.library")
+        apply(plugin = "org.jetbrains.kotlin.android")
+        apply(plugin = "com.google.devtools.ksp")
 
         val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
         var compileSdk = libs.findVersion("compileSdk").get().toString().toInt()
@@ -53,7 +55,7 @@ class LibraryConventionPlugin : Plugin<Project> {
                 )
             }
 
-            tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+            tasks.withType<KotlinCompile>().configureEach {
                 kotlinOptions {
                     jvmTarget = JavaVersion.VERSION_17.toString()
                 }
