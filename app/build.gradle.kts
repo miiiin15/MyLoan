@@ -2,9 +2,11 @@ import com.android.build.api.dsl.ApplicationDefaultConfig
 import java.util.Locale
 
 plugins {
-    id("local.app")
+    alias(libs.plugins.convention.app)
+    alias(libs.plugins.convention.kotlin)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {

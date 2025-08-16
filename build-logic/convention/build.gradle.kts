@@ -27,6 +27,7 @@ dependencies {
     compileOnly(libs.spotless)
     compileOnly(libs.detekt)
     implementation(libs.truth)
+    implementation(libs.gradle)
 }
 
 tasks {
@@ -50,17 +51,17 @@ gradlePlugin {
             id = "convention.kotlin"
             implementationClass = "KotlinConventionPlugin"
         }
-        register("testConvention") {
-            id = "convention.test"
-            implementationClass = "TestConventionPlugin"
-        }
-        register("spotlessConvention") {
-            id = "convention.spotless"
-            implementationClass = "SpotlessConventionPlugin"
-        }
-        register("detektConvention") {
-            id = "convention.detekt"
-            implementationClass = "DetektConventionPlugin"
-        }
+//        register("testConvention") {
+//            id = "convention.test"
+//            implementationClass = "TestConventionPlugin"
+//        }
+//        register("spotlessConvention") {
+//            id = "convention.spotless"
+//            implementationClass = "SpotlessConventionPlugin"
+//        }
+//        register("detektConvention") {
+//            id = "convention.detekt"
+//            implementationClass = "DetektConventionPlugin"
+//        }
     }
 }

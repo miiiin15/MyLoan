@@ -1,7 +1,7 @@
 plugins {
-    id("local.library")
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.convention.library)
 }
 
 android {
@@ -9,8 +9,6 @@ android {
 }
 
 dependencies {
-    // See Dependency management section in the README.md
-    // https://github.com/igorwojda/android-showcase#dependency-management
     api(libs.kotlin)
     api(libs.kotlinx.immutable)
     api(libs.playCore)

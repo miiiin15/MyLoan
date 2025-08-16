@@ -1,5 +1,6 @@
 [versions]
 activityCompose = "1.8.2"
+gradle = "8.3.2"
 kotlin = "2.0.0"
 
 # KSP depends on specific Kotlin version, so it must be upgraded together with Kotlin (disabled in Renovate)
@@ -58,7 +59,6 @@ coreTesting = "2.2.0"
 junitVersion = "1.2.1"
 googleGmsGoogleServices = "4.4.2"
 
-ksp = "2.2.20-2.0.4"
 protobuf = "4.29.2"
 androidxMacroBenchmark = "1.3.4"
 truth = "1.4.4"
@@ -75,7 +75,6 @@ android-library = { id = "com.android.library", version.ref = "androidGradlePlug
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-kotlin-symbolProcessing = { id = "com.google.devtools.ksp", version.ref = "kotlinSymbolProcessing" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 safeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
@@ -88,9 +87,10 @@ android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidxMacroBenchmark"}
 dependencyGuard = { id = "com.dropbox.dependency-guard", version.ref = "dependencyGuard" }
 koin = { id = "io.insert-koin", version.ref = "koin" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "kotlinSymbolProcessing" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 room = { id = "androidx.room", version.ref = "room" }
+
 
 # 커스텀 컨벤션 플러그인
 convention-app = { id = "convention.app" }
@@ -101,6 +101,7 @@ convention-spotless = { id = "convention.spotless" }
 convention-detekt = { id = "convention.detekt" }
 
 [libraries]
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 kotlin = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlinx-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
@@ -145,11 +146,11 @@ firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx"
 firebase-database-ktx = { module = "com.google.firebase:firebase-database-ktx", version = "21.0.0" }
 
 # Dependencies of the included build-logic
-android-gradleApiPlugin = { group = "com.android.tools.build", name = "gradle-api", version.ref = "androidGradlePlugin" }
+android-gradleApiPlugin = { group = "com.android.tools.build", name = "gradle-api", version.ref = "gradle" }
 #android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
 compose-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "kotlinSymbolProcessing" }
 room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }

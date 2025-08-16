@@ -1,5 +1,6 @@
 plugins {
-    id("local.library")
+    alias(libs.plugins.safeArgs)
+    alias(libs.plugins.convention.library)
     alias(libs.plugins.compose.compiler)
 }
 
