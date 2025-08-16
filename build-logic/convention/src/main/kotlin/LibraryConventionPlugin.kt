@@ -1,28 +1,63 @@
-import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.LibraryExtension
+import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.accessors.dm.LibrariesForLibs
+import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 
 class LibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         pluginManager.apply("com.android.library")
-        pluginManager.apply("local.kotlin")
-        pluginManager.apply("local.test")
-        pluginManager.apply("androidx.navigation.safeargs.kotlin")
+        pluginManager.apply("org.jetbrains.kotlin.android")
         pluginManager.apply("com.google.devtools.ksp")
 
-        extensions.configure(LibraryExtension::class.java) { ext ->
-            val libs = extensions.getByType<LibrariesForLibs>()
-            ext.namespace = "com.miiiin15.myloan"
-            ext.compileSdk = libs.versions.compileSdk.get().toInt()
-            ext.defaultConfig {
-                minSdk = libs.versions.minSdk.get().toInt()
+        val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
+        var compileSdk = libs.findVersion("compileSdk").get().toString().toInt()
+        var minSdk = libs.findVersion("minSdk").get().toString().toInt()
+
+        extensions.configure<LibraryExtension> {
+            this.compileSdk = compileSdk
+            namespace = "com.miiiin15.myloan"
+
+            defaultConfig {
+                this.minSdk = minSdk
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 consumerProguardFiles("consumer-rules.pro")
             }
-            // 이하 생략: composeOptions, compileOptions, kotlinOptions, testOptions, packaging 등
+
+            buildFeatures {
+                compose = true
+                viewBinding = true
+                buildConfig = true
+            }
+
+            compileOptions {
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
+            }
+
+            testOptions {
+                unitTests.isReturnDefaultValues = true
+            }
+
+            packaging {
+                resources.excludes.addAll(
+                    listOf(
+                        "META-INF/AL2.0",
+                        "META-INF/licenses/**",
+                        "**/attach_hotspot_windows.dll",
+                        "META-INF/LGPL2.1"
+                    )
+                )
+            }
+
+            tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+                kotlinOptions {
+                    jvmTarget = JavaVersion.VERSION_17.toString()
+                }
+            }
         }
     }
 }
