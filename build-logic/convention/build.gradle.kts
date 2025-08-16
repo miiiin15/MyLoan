@@ -40,21 +40,21 @@ tasks {
 gradlePlugin {
     plugins {
         register("appConvention") {
-            id = "convention.app"
+            id = libs.plugins.convention.app.get().pluginId
             implementationClass = "AppConventionPlugin"
         }
         register("libraryConvention") {
-            id = "convention.library"
+            id = libs.plugins.convention.library.get().pluginId
             implementationClass = "LibraryConventionPlugin"
         }
         register("kotlinConvention") {
-            id = "convention.kotlin"
+            id = libs.plugins.convention.kotlin.get().pluginId
             implementationClass = "KotlinConventionPlugin"
         }
-//        register("testConvention") {
-//            id = "convention.test"
-//            implementationClass = "TestConventionPlugin"
-//        }
+        register("testConvention") {
+            id = libs.plugins.convention.test.get().pluginId
+            implementationClass = "TestConventionPlugin"
+        }
 //        register("spotlessConvention") {
 //            id = "convention.spotless"
 //            implementationClass = "SpotlessConventionPlugin"
