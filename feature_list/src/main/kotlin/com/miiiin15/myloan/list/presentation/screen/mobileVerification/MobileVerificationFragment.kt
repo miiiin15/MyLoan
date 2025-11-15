@@ -64,12 +64,6 @@ class MobileVerificationFragment : BaseFragment() {
 @Composable
 private fun MobileVerificationScreen(viewModel: MobileVerificationViewModel) {
     val uiState: UiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
-
-    val personalInfo by viewModel.userInfo.collectAsStateWithLifecycle()
-    val contactInfo by viewModel.contactInfo.collectAsStateWithLifecycle()
-    val verificationInfo by viewModel.verificationInfo.collectAsStateWithLifecycle()
-
-    val countdownTime = viewModel.countdownTime.collectAsStateWithLifecycle()
     val isCodeReceived =
         remember(uiState) { uiState is UiState.CodeReceived || uiState is UiState.CodeVerifyFailure }
     val isVerificationConfirmed = remember(uiState) { uiState is UiState.Completed }
@@ -137,28 +131,21 @@ private fun MobileVerificationScreen(viewModel: MobileVerificationViewModel) {
             )
 
             // 개인정보 입력
-            MobileVerificationContent(
+MobileVerificationContent(
                 isCodeReceived = isCodeReceived || isVerificationConfirmed,
-                userInfo = personalInfo,
-                updateField = viewModel::updateField,
+                viewModel = viewModel,
             )
 
             // 통신사, 전화번호 입력
-            MobileVerificationPhoneInput(
+MobileVerificationPhoneInput(
                 isCodeReceived = isCodeReceived || isVerificationConfirmed,
-                contactInfo = contactInfo,
-                updateField = viewModel::updateField,
-                requestVerificationCode = viewModel::requestVerificationCode
+                viewModel = viewModel,
             )
 
             // 인증번호 입력
             if (isCodeReceived) {
-                CountdownTimer(countdownTime.value)
-                MobileVerificationCodeInput(
-                    verificationInfo = verificationInfo,
-                    updateField = viewModel::updateField,
-                    onButtonClick = viewModel::confirmVerificationCode
-                )
+                CountdownTimer(viewModel)
+ MobileVerificationCodeInput(viewModel)
             }
         })
 }
@@ -167,13 +154,14 @@ private fun MobileVerificationScreen(viewModel: MobileVerificationViewModel) {
 @Composable
 private fun MobileVerificationContent(
     isCodeReceived: Boolean,
-    userInfo: UserInfo,
-    updateField: (String, String) -> Unit,
+    viewModel: MobileVerificationViewModel
 ) {
+    val userInfo by viewModel.userInfo.collectAsStateWithLifecycle()
+
     //이름
     InputField(
         value = userInfo.name ?: "",
-        onValueChange = { updateField("name", it) },
+        onValueChange = { viewModel.updateField("name", it) },
         disable = isCodeReceived,
         fieldType = InputType.TEXT,
         placeholder = "이름 입력",
@@ -188,7 +176,7 @@ private fun MobileVerificationContent(
         // 주민번호 앞자리
         InputField(
             value = userInfo.birthDate ?: "",
-            onValueChange = { updateField("birthDate", it) },
+            onValueChange = { viewModel.updateField("birthDate", it) },
             disable = isCodeReceived,
             fieldType = InputType.NUMBER,
             placeholder = "주민번호 앞자리",
@@ -202,7 +190,7 @@ private fun MobileVerificationContent(
         // 주민번호 뒷자리
         InputField(
             value = userInfo.residentialNumber ?: "",
-            onValueChange = { updateField("residentialNumber", it) },
+            onValueChange = { viewModel.updateField("residentialNumber", it) },
             disable = isCodeReceived,
             fieldType = InputType.RESIDENT_ID,
             placeholder = "주민번호 뒷자리",
@@ -216,13 +204,12 @@ private fun MobileVerificationContent(
 
 // 통신사, 전화번호 입력
 @Composable
-fun MobileVerificationPhoneInput(
+private fun MobileVerificationPhoneInput(
     isCodeReceived: Boolean,
-    contactInfo: ContactInfo,
-    updateField: (String, String) -> Unit,
-    requestVerificationCode: (String) -> Unit
-
+    viewModel: MobileVerificationViewModel,
 ) {
+    val contactInfo by viewModel.contactInfo.collectAsStateWithLifecycle()
+
     val buttonText = if (isCodeReceived) "재요청" else "인증번호"
     SelectField(
         value = contactInfo.carrierCode,
@@ -232,7 +219,7 @@ fun MobileVerificationPhoneInput(
             "03" to "LGU+"
         ),
         placeholder = "통신사 선택",
-        onOptionSelected = { updateField("carrierCode", it) },
+        onOptionSelected = { viewModel.updateField("carrierCode", it) },
         disable = isCodeReceived,
         modifier = Modifier
             .fillMaxWidth()
@@ -244,7 +231,7 @@ fun MobileVerificationPhoneInput(
     ) {
         InputField(
             value = contactInfo.phoneNumber ?: "",
-            onValueChange = { updateField("phoneNumber", it) },
+            onValueChange = { viewModel.updateField("phoneNumber", it) },
             disable = isCodeReceived,
             fieldType = InputType.PHONE,
             placeholder = "휴대폰 번호 입력",
@@ -254,7 +241,7 @@ fun MobileVerificationPhoneInput(
         )
         Button(
             enabled = contactInfo.phoneNumber?.length == 11,
-            onClick = { requestVerificationCode(contactInfo.phoneNumber!!) },
+            onClick = { viewModel.requestVerificationCode(contactInfo.phoneNumber!!) },
             modifier = Modifier
                 .align(Alignment.CenterVertically)
                 .height(Dimen.buttonHeight)
@@ -272,7 +259,10 @@ fun MobileVerificationPhoneInput(
 
 // 카운트다운 타이머
 @Composable
-fun CountdownTimer(countdownTime: Long) {
+private fun CountdownTimer(
+    viewModel: MobileVerificationViewModel
+) {
+    val countdownTime = viewModel.countdownTime.collectAsStateWithLifecycle().value
     if (countdownTime > 0) {
         TextDynamic(
             text = "남은 시간: ${countdownTime / 60}:${
@@ -284,18 +274,18 @@ fun CountdownTimer(countdownTime: Long) {
 
 // 인증번호 입력
 @Composable
-fun MobileVerificationCodeInput(
-    verificationInfo: VerificationInfo,
-    updateField: (String, String) -> Unit,
-    onButtonClick: () -> Unit
+private fun MobileVerificationCodeInput(
+    viewModel: MobileVerificationViewModel
 ) {
+    val verificationInfo by viewModel.verificationInfo.collectAsStateWithLifecycle()
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(bottom = Dimen.spaceL)
     ) {
         InputField(
             value = verificationInfo.verificationCode ?: "",
-            onValueChange = { updateField("verificationCode", it) },
+            onValueChange = { viewModel.updateField("verificationCode", it) },
             fieldType = InputType.NUMBER,
             placeholder = "인증번호 999999",
             modifier = Modifier.weight(1f),
@@ -303,7 +293,7 @@ fun MobileVerificationCodeInput(
         )
         Button(
             enabled = verificationInfo.verificationCode?.length == 6,
-            onClick = onButtonClick,
+            onClick = viewModel::confirmVerificationCode,
             modifier = Modifier
                 .align(Alignment.CenterVertically)
                 .height(Dimen.buttonHeight)
