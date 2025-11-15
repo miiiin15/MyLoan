@@ -36,7 +36,6 @@ fun PolicyList(
     onAllPolicyAgreed: (List<String>, Boolean) -> Unit,
     onClick: () -> Unit = {}
 ) {
-
     val policyCheckStates = rememberSaveable(
         policyList,
         saver = listSaver(
@@ -109,44 +108,43 @@ fun PolicyList(
 
             // 개별 정책 Row
             policyList.forEachIndexed { index, policy ->
-                val requiredText = if (policy.required) "[필수] " else "[선택] "
-                val requireTextColor = if (policy.required) {
-                    MaterialTheme.colorScheme.error
-                } else {
-                    MaterialTheme.colorScheme.primary
-                }
                 key(policy.id) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                bottom = Dimen.spaceM,
-                                start = Dimen.spaceM,
-                                end = Dimen.spaceM
-                            )
-                            .height(Dimen.spaceXL)
-                            .clickable { policyCheckStates[index] = !policyCheckStates[index] }
-                    ) {
-                        Checkbox(
-                            checked = policyCheckStates[index],
-                            modifier = Modifier.padding(end = Dimen.spaceS),
-                            onCheckedChange = null
-                        )
-                        TextDynamic(
-                            text = requiredText,
-                            color = requireTextColor
-                        )
-                        TextDynamic(
-                            text = policy.title,
-                            color = MaterialTheme.colorScheme.primary,
-                        )
-                    }
+                    PolicyRow(
+                        id = policy.id,
+                        title = policy.title,
+                        required = policy.required,
+                        checked = policyCheckStates[index],
+                        onToggle = { policyCheckStates[index] = !policyCheckStates[index] }
+                    )
                     if (index < policyList.size - 1) {
                         Spacer(modifier = Modifier.height(Dimen.spaceM))
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun PolicyRow(
+    id: String,
+    title: String,
+    required: Boolean,
+    checked: Boolean,
+    onToggle: () -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onToggle() }
+            .padding(Dimen.spaceM)
+    ) {
+        Checkbox(checked = checked, onCheckedChange = null)
+        TextDynamic(
+            text = if (required) "[필수] " else "[선택] ",
+            color = if (required) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+        )
+        TextDynamic(text = title)
     }
 }
